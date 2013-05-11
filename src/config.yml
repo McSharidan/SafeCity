@@ -1,0 +1,11 @@
+database:
+  type: MYSQL
+  url: 127.0.0.1
+  port: 3306
+  databasename: safecity
+  username: username
+  password: password
+
+general:
+  min-zone-distance: 50
+  max-zones-per-player: 1
