@@ -914,6 +914,7 @@ public final class PermissionListener implements Listener
 
         Player player = event.getPlayer();
         ThinLocation playerLoc = context.toThinLocation(player.getLocation());
+        
         SafeCityZone zone = context.getZone(playerLoc, player.getWorld());
         
         if (zone == null) 

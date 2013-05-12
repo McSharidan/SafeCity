@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -145,15 +144,6 @@ public final class SafeCityZone extends GenericZone
 		this.setSalePrice(salePrice);
 		this.setOwner(owner);
 
-		/*StringBuilder statement = new StringBuilder()
-            .append("UPDATE zones SET ")
-            .append("isForSale = '").append(booleanToBinary(this.isForSale())).append("', ")
-            .append("salePrice = '").append(this.getSalePrice()).append("', ")
-            .append("owner = '").append(this.getOwner()).append("' ")
-			.append("WHERE id = '").append(this.getId()).append("'");
-
-		this.getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(this.getContext().getPlugin(),	new MySql_SetValues(this.getContext(), statement.toString()));*/
-        
         getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(getContext().getPlugin(), new Runnable() 
         {
             @Override
@@ -207,13 +197,6 @@ public final class SafeCityZone extends GenericZone
 	{
 		isPublic = value;
 
-		/*StringBuilder statement = new StringBuilder()
-            .append("UPDATE zones SET ")
-            .append("isPublic = '").append(booleanToBinary(this.isPublic())).append("' ")
-			.append("WHERE id = '").append(this.getId()).append("'");
-
-		this.getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(this.getContext().getPlugin(),	new MySql_SetValues(this.getContext(), statement.toString()));*/
-        
         getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(getContext().getPlugin(), new Runnable() 
         {
             @Override
@@ -284,7 +267,7 @@ public final class SafeCityZone extends GenericZone
 	{
         for (int i = 0; i < this.getPopulation().length; i++)
         {
-            if (this.getPopulation()[0].equals(playerName))
+            if (this.getPopulation()[i].equalsIgnoreCase(playerName))
             {
                 return true;
             }
@@ -391,17 +374,6 @@ public final class SafeCityZone extends GenericZone
 	public void setSpawnPoint(Location location)
 	{
 		this.spawnLocation = location;
-
-		/*StringBuilder statement = new StringBuilder()
-            .append("UPDATE zones SET ")
-            .append("spawnLocationX = '").append(this.getSpawnPoint().getBlockX()).append("', ")
-            .append("spawnLocationY = '").append(this.getSpawnPoint().getBlockY()).append("', ")
-            .append("spawnLocationZ = '").append(this.getSpawnPoint().getBlockZ()).append("', ")
-            .append("spawnLocationPitch = '").append(this.getSpawnPoint().getPitch()).append("', ")
-            .append("spawnLocationYaw = '").append(this.getSpawnPoint().getYaw()).append("' ")
-			.append("WHERE id = '").append(this.getId()).append("'");
-
-		this.getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(this.getContext().getPlugin(),	new MySql_SetValues(this.getContext(), statement.toString()));*/
         
         getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(getContext().getPlugin(), new Runnable() 
         {
@@ -468,13 +440,6 @@ public final class SafeCityZone extends GenericZone
 	public void setPublicTeleportAllowed(boolean value)
 	{
 		publicTeleportEnabled = value;
-
-		/*StringBuilder statement = new StringBuilder()
-            .append("UPDATE zones SET ")
-            .append("publicTeleportAllowed = '").append(booleanToBinary(this.publicTeleportAllowed())).append("' ")
-			.append("WHERE id = '").append(this.getId()).append("'");
-
-		this.getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(this.getContext().getPlugin(),	new MySql_SetValues(this.getContext(), statement.toString()));*/
         
         getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(getContext().getPlugin(), new Runnable() 
         {
@@ -528,13 +493,6 @@ public final class SafeCityZone extends GenericZone
 	public void setAvailableBlocks(int blockCount)
 	{
 		this.availableBlocks = blockCount;
-
-		/*StringBuilder statement = new StringBuilder()
-            .append("UPDATE zones SET ")
-            .append("availableBlocks = '").append(this.getAvailableBlocks()).append("' ")
-			.append("WHERE id = '").append(this.getId()).append("'");
-
-		this.getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(this.getContext().getPlugin(),	new MySql_SetValues(this.getContext(), statement.toString()));*/
         
         getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(getContext().getPlugin(), new Runnable() 
         {
