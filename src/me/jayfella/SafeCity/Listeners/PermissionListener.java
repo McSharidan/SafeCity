@@ -162,6 +162,7 @@ public final class PermissionListener implements Listener
 				|| clickedItem == Material.WORKBENCH
 				|| clickedItem == Material.WOOD_BUTTON
 				|| clickedItem == Material.STONE_BUTTON
+                || clickedItem == Material.TRAPPED_CHEST
 				|| clickedItem == Material.LEVER
 				|| clickedItem == Material.STONE_PLATE
 				|| clickedItem == Material.WOOD_PLATE
