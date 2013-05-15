@@ -74,7 +74,7 @@ public final class VisualManager
 
     private boolean isTransparent(Block block)
     {
-        return (block.getType() == Material.AIR) ||
+        /*return (block.getType() == Material.AIR) ||
                 (block.getType() == Material.LONG_GRASS) ||
 		(block.getType() == Material.FENCE) ||
 		(block.getType() == Material.CHEST) ||
@@ -82,7 +82,9 @@ public final class VisualManager
 		(block.getType() == Material.VINE) ||
 		(block.getType() == Material.LEAVES) ||
 		(block.getType() == Material.RED_ROSE) ||
-		(block.getType() == Material.YELLOW_FLOWER);
+		(block.getType() == Material.YELLOW_FLOWER);*/
+        
+        return !block.getType().isSolid();
     }
 
     public void clearVisuals(boolean runAsync) { this.getVisualRemover().removeVisuals(runAsync); }
