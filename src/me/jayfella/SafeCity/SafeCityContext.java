@@ -31,6 +31,7 @@ import me.jayfella.SafeCity.Listeners.ZoneVisualListener;
 import me.jayfella.SafeCity.Runnables.RentCycleThread;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -67,7 +68,7 @@ public final class SafeCityContext
 	{
 		this.plugin = plugin;
 
-		initializeVault();
+		boolean vaultPresent = initializeVault();
 
         this.economy = initializeEconomy();
 		this.bukkitPermission = initializePermissions();
@@ -75,8 +76,17 @@ public final class SafeCityContext
         this.pluginSettings = new PluginSettings(this);
 
         this.mySql = initializeDatabase();
+        
+        if (!vaultPresent | this.economy == null)
+        {
+            Bukkit.getPluginManager().disablePlugin(plugin);
+            return;
+        }
+        
 		this.mySql.loadZones();
 		this.mySql.loadSubZones();
+        
+        
 
         this.pluginSettings.setZoneIncrement(this.getMySql().getLastLoadedIncrement());
 
@@ -144,7 +154,7 @@ public final class SafeCityContext
 
 		if (rsp == null)
 		{
-			plugin.getLogger().info("Vault NOT PRESENT.");
+			plugin.getLogger().info("Compatible Economy plugin NOT PRESENT.");
 			plugin.getLogger().warning("Disabling plugin.");
 
 			plugin.getPluginLoader().disablePlugin(plugin);
@@ -156,7 +166,7 @@ public final class SafeCityContext
 
 		if (econ != null)
 		{
-			plugin.getLogger().log(Level.INFO, "Vault has detected and connected to {0}", econ.getName());
+			plugin.getLogger().log(Level.INFO, "Using Economy: {0}", econ.getName());
 		}
 		else
 		{
@@ -175,7 +185,7 @@ public final class SafeCityContext
 
 		if (bPermission != null)
 		{
-			plugin.getLogger().log(Level.INFO, "Vault has detected and connected to {0}", bPermission.getName());
+			plugin.getLogger().log(Level.INFO, "Using Permissions: {0}", bPermission.getName());
 		}
 		else
 		{
