@@ -26,10 +26,10 @@ public final class VisualManager
     private final int zoneMaterial = Material.WOOL.getId();
 
     private final int zoneNormalData = 11; // white
-    private final int zoneForSaleData = 5; // lime green
+    private final int zoneForSaleData = 13; // lime green
     private final int zoneForRentData = 5; // lime green
     private final int zoneSoldData = 14; // dark red
-    private final int zoneRentedData = 14; // dark red
+    private final int zoneRentedData = 1; // dark red
 
     public VisualManager(SafeCityContext context, SafeCityPlayer scPlayer)
     {

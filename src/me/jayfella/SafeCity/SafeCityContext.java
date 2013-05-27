@@ -76,17 +76,17 @@ public final class SafeCityContext
         this.pluginSettings = new PluginSettings(this);
 
         this.mySql = initializeDatabase();
-        
+
         if (!vaultPresent | this.economy == null)
         {
             Bukkit.getPluginManager().disablePlugin(plugin);
             return;
         }
-        
+
 		this.mySql.loadZones();
 		this.mySql.loadSubZones();
-        
-        
+
+
 
         this.pluginSettings.setZoneIncrement(this.getMySql().getLastLoadedIncrement());
 
@@ -176,7 +176,7 @@ public final class SafeCityContext
 		}
 
         return econ;
-  }
+    }
 
 	private Permission initializePermissions()
 	{
@@ -244,26 +244,26 @@ public final class SafeCityContext
 	public List<SafeCitySubZone> getSubZones() { return this.subZones; }
 
     public void addZone(SafeCityZone zone) { this.zones.add(zone);  }
-    public void removeZone(SafeCityZone zone) 
-    { 
+    public void removeZone(SafeCityZone zone)
+    {
         // remove the sign
             if (zone.getInfoSignLocation() != null)
             {
                 if (zone.getInfoSign() != null)
                 {
                     Location signLoc = new Location(zone.getWorld(), zone.getInfoSignLocation().getBlockX(), zone.getInfoSignLocation().getBlockY(), zone.getInfoSignLocation().getBlockZ());
-                    
+
                     zone.getWorld().getBlockAt(signLoc).setType(Material.AIR);
                     zone.getWorld().dropItem(signLoc, new ItemStack(Material.SIGN));
                 }
             }
-        
-        this.zones.remove(zone); 
+
+        this.zones.remove(zone);
     }
 
     public void addSubZone(SafeCitySubZone subZone) { this.subZones.add(subZone); }
-    public void removeSubZone(SafeCitySubZone subZone) 
-    { 
+    public void removeSubZone(SafeCitySubZone subZone)
+    {
         // remove the [details] sign
         if (subZone.getInfoSignLocation() != null)
         {
@@ -275,8 +275,8 @@ public final class SafeCityContext
                 subZone.getWorld().dropItem(signLoc, new ItemStack(Material.SIGN));
             }
         }
-        
-        this.subZones.remove(subZone); 
+
+        this.subZones.remove(subZone);
     }
 
     public SafeCityZone getZone(ThinLocation location, World world)
@@ -329,24 +329,24 @@ public final class SafeCityContext
 
         // if not exist, try loading the player from the database
         scP = this.getMySql().loadPlayer(player.getName());
-        if (scP != null) 
-        { 
+        if (scP != null)
+        {
             safeCityPlayers.put(player, scP);
             return scP;
         }
-        
+
         // if not exist, create a new player, and add them to the map
 		SafeCityPlayer p = new SafeCityPlayer(this, player);
         safeCityPlayers.put(player, p);
 		return p;
 	}
-    
-    
+
+
     public SafeCityOfflinePlayer getOfflinePlayer(String playerName)
     {
         return this.getMySql().loadOfflinePlayer(playerName);
     }
-    
+
     public boolean playerExists(String playerName)
     {
         return this.getMySql().playerExists(playerName);
@@ -363,18 +363,18 @@ public final class SafeCityContext
         int seconds = (int) (timeDiff / 1000) % 60 ;
 
         StringBuilder difference = new StringBuilder();
-        
+
         if (weeks > 0) { difference.append(ChatColor.RED).append(weeks).append(ChatColor.GOLD).append("weeks "); }
         if (days > 0) { difference.append(ChatColor.RED).append(days).append(ChatColor.GOLD).append("days "); }
         if (hours > 0) { difference.append(ChatColor.RED).append(hours).append(ChatColor.GOLD).append("hrs "); }
         if (minutes > 0) { difference.append(ChatColor.RED).append(minutes).append(ChatColor.GOLD).append("mins "); }
-        
+
 
         difference.append(ChatColor.RED).append(seconds).append(ChatColor.GOLD).append("s");
 
         return difference.toString();
     }
-    
+
 	public void removePlayer(Player player) { safeCityPlayers.remove(player); }
 
 	public ThinLocation[] sortCorners(ThinLocation lesserCorner, ThinLocation greaterCorner)
@@ -477,7 +477,7 @@ public final class SafeCityContext
 
         return false;
 	}
-    
+
     public void addNewZoneToMap(SafeCityZone zone)
     {
         int minX = zone.getLesserCorner().getBlockX();

@@ -32,7 +32,7 @@ public final class EstateManager
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Not_Found());
             return false;
         }
-        
+
         if (!zone.isPublic())
         {
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "Only public zones can rent areas of land.");
@@ -60,7 +60,7 @@ public final class EstateManager
             if (subZone.isFounder(scPlayer.getBukkitPlayer().getName()) || subZone.isBuyer(scPlayer.getBukkitPlayer().getName()))
             {
                 scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Already_Own());
-                return false;
+                // return false;
             }
 
             if (!subZone.isForRent() && !subZone.isRenter(scPlayer.getBukkitPlayer().getName()))
@@ -77,7 +77,7 @@ public final class EstateManager
         }
 
         // withdraw money from buyer
-        EconomyResponse ecoresp = context.getEconomy().withdrawPlayer(scPlayer.getBukkitPlayer().getName(), zone.getSalePrice());
+        EconomyResponse ecoresp = context.getEconomy().withdrawPlayer(scPlayer.getBukkitPlayer().getName(), (subZone == null) ? zone.getSalePrice() : subZone.getSalePrice());
         if (!ecoresp.transactionSuccess())
         {
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Insufficient_Funds());
@@ -86,7 +86,7 @@ public final class EstateManager
 
         // give money to seller
         // TODO: Give money back to buyer if rent fails
-        ecoresp = context.getEconomy().depositPlayer(scPlayer.getBukkitPlayer().getName(), zone.getSalePrice());
+        ecoresp = context.getEconomy().depositPlayer(scPlayer.getBukkitPlayer().getName(), (subZone == null) ? zone.getSalePrice() : subZone.getSalePrice());
         if (!ecoresp.transactionSuccess())
         {
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "Critical error depositing money. Transaction failed!");
@@ -167,9 +167,9 @@ public final class EstateManager
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Not_Found());
             return false;
         }
-        
+
         SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(zoneLocation), scPlayer.getBukkitPlayer().getWorld());
-        
+
         if (subZone != null)
         {
             if (!zone.isPublic())
@@ -282,7 +282,7 @@ public final class EstateManager
                     context.getSignManager().setSoldSignal(zone.getInfoSign(), scPlayer.getBukkitPlayer().getName());
                 }
             }
-            
+
             for (SafeCitySubZone child : zone.getChildren())
             {
                 child.setOwner(scPlayer.getBukkitPlayer().getName());
