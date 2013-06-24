@@ -4,8 +4,11 @@ import me.jayfella.SafeCity.Core.ThinLocation;
 import me.jayfella.SafeCity.Core.ZonePermissionType;
 import me.jayfella.SafeCity.SafeCityContext;
 import me.jayfella.SafeCity.SafeCitySubZone;
+import me.jayfella.SafeCity.SafeCitySubZoneCollection;
 import me.jayfella.SafeCity.SafeCityZone;
+import me.jayfella.SafeCity.SafeCityZoneCollection;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -16,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Sign;
 
@@ -263,6 +267,88 @@ public final class SignsListener implements Listener
                 foundZone.setInfoSignLocation(context.toThinLocation(signBlock.getLocation()));
             }
         }
+    }
+
+    // used for state changes when chunks are not loaded.
+    @EventHandler
+    public void onChunkLoad(ChunkLoadEvent event)
+    {
+        Chunk chunk = event.getChunk();
+
+        SafeCityZoneCollection zoneCollection = context.getZonesInChunk(chunk.getX(), chunk.getZ());
+
+        if (zoneCollection == null)
+            return;
+
+        int minX = chunk.getX() << 4;
+        int maxX = minX + 16;
+
+        int minZ = chunk.getZ() << 4;
+        int maxZ = minZ + 16;
+
+        for (SafeCityZone z : zoneCollection.getAllZones())
+        {
+            if (z.getInfoSign() == null)
+                continue;
+
+            // if sign isnt in this chunk, dont force load it.
+            if (z.getInfoSignLocation().getBlockX() < minX || z.getInfoSignLocation().getBlockX() > maxX || z.getInfoSignLocation().getBlockZ() < minZ || z.getInfoSignLocation().getBlockZ() > maxZ)
+                continue;
+
+            if (z.isForSale())
+            {
+                context.getSignManager().setSaleSignal(z.getInfoSign(), z.getSalePrice());
+            }
+            else if (z.isForRent())
+            {
+                context.getSignManager().setRentSignal(z.getInfoSign(), z.getSalePrice(), z.getRentalLength());
+            }
+            else if (z.isRented())
+            {
+                context.getSignManager().setRentedSign(z.getInfoSign(), z.getRenter());
+            }
+            else
+            {
+                context.getSignManager().displayOwnerSign(z.getInfoSign(), z.getFounder());
+            }
+        }
+
+        SafeCitySubZoneCollection subZoneCollection = context.getSubZonesInChunk(chunk.getX(), chunk.getZ());
+
+        if (subZoneCollection == null)
+            return;
+
+        for (SafeCitySubZone sz : subZoneCollection.getAllSubZones())
+        {
+            if (sz.getInfoSign() == null)
+                continue;
+
+            // if sign isnt in this chunk, dont force load it.
+            if (sz.getInfoSignLocation().getBlockX() < minX || sz.getInfoSignLocation().getBlockX() > maxX || sz.getInfoSignLocation().getBlockZ() < minZ || sz.getInfoSignLocation().getBlockZ() > maxZ)
+                continue;
+
+            if (sz.isForSale())
+            {
+                context.getSignManager().setSaleSignal(sz.getInfoSign(), sz.getSalePrice());
+            }
+            else if (sz.isSold())
+            {
+                context.getSignManager().setSoldSignal(sz.getInfoSign(), sz.getBuyer());
+            }
+            else if (sz.isForRent())
+            {
+                context.getSignManager().setRentSignal(sz.getInfoSign(), sz.getSalePrice(), sz.getRentalLength());
+            }
+            else if (sz.isRented())
+            {
+                context.getSignManager().setRentedSign(sz.getInfoSign(), sz.getRenter());
+            }
+            else
+            {
+                context.getSignManager().displayOwnerSign(sz.getInfoSign(), sz.getFounder());
+            }
+        }
+
     }
 
 }

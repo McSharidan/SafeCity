@@ -1,6 +1,7 @@
 package me.jayfella.SafeCity.Core;
 
 import me.jayfella.SafeCity.SafeCityContext;
+import me.jayfella.SafeCity.SafeCityZone;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.SignChangeEvent;
@@ -65,7 +66,6 @@ public final class ZoneSignManager
     }
 
 
-
     public void displayOwnerSign(SignChangeEvent event, String ownerName)
     {
         event.setLine(0, signOwner);
@@ -83,7 +83,6 @@ public final class ZoneSignManager
 
         sign.update();
     }
-
 
 
     public void setSaleSignal(SignChangeEvent event, int price)
@@ -147,6 +146,14 @@ public final class ZoneSignManager
     public String getSoldSignal()
     {
         return this.soldSignal;
+    }
+
+    public void setSignState(SafeCityZone zone)
+    {
+        if (zone.isForSale())
+        {
+
+        }
     }
 
 }
