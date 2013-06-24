@@ -36,6 +36,15 @@ public final class ZoneCommands implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
+        if (sender instanceof Player)
+        {
+            if (!context.isValidWorld(((Player)sender).getWorld().getName()))
+            {
+                sender.sendMessage(ChatColor.RED + "SafeCity is not enabled in this world.");
+                return true;
+            }
+        }
+
         if (!(sender instanceof Player))
         {
             sender.sendMessage(context.getMessageHandler().Ingame_Only());
@@ -315,7 +324,7 @@ public final class ZoneCommands implements CommandExecutor
             displayZoneData(sender, cmd, label, args);
             return true;
         }
-        
+
         return true;
     }
 
@@ -348,7 +357,7 @@ public final class ZoneCommands implements CommandExecutor
                 scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().No_Permission());
                 return;
             }
-        } 
+        }
         else
         {
             boolean canRename = false;
@@ -496,20 +505,20 @@ public final class ZoneCommands implements CommandExecutor
 
             // remove children from database
             int subZoneCount = context.getMySql().removeSubZones(zone.getId());
-            
+
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Deleted(subZoneCount));
 
             context.getMySql().removeZone(zone.getId());
             context.removeZone(zone);
             context.removeZoneFromMap(zone);
-            
+
         } else
         {
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().SubZone_Deleted(subZone.getName()));
-            
+
             context.getMySql().removeSubZone(subZone.getId());
             context.removeSubZone(subZone);
-            context.removeSubZoneFromMap(subZone);            
+            context.removeSubZoneFromMap(subZone);
         }
 
         // refresh zone information
@@ -534,7 +543,7 @@ public final class ZoneCommands implements CommandExecutor
                     }
                 }
             }
-        } 
+        }
         else
         {
             for (ZonePermissionType p : ZonePermissionType.values())
@@ -558,10 +567,10 @@ public final class ZoneCommands implements CommandExecutor
                     }
                 }
             }
-            
+
             // buyer permission
-            // buyer does not belong 
-            
+            // buyer does not belong
+
         }
 
         return false;
@@ -609,26 +618,26 @@ public final class ZoneCommands implements CommandExecutor
             if (permission.getPermissions().requiresOwnerPermission())
             {
                 boolean isAllowed = false;
-                
+
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
                 {
                     isAllowed = true;
                 }
-                
+
                 // staff override
                 if (scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Staff_Override.permissionNode()))
                 {
                     scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + ">>** Staff Override - Owner Permission");
                     isAllowed = true;
                 }
-                
+
                 if (!isAllowed)
                 {
                     scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Permission_RequiresOwner(permission));
                     return;
                 }
             }
-        } 
+        }
         else
         {
             if (permission.getPermissions().requiresOwnerPermission())
@@ -677,7 +686,7 @@ public final class ZoneCommands implements CommandExecutor
             }
 
             newPlayerName = (onPlayer == null) ? offPlayer.getName() : onPlayer.getName();
-        } 
+        }
         else
         {
             newPlayerName = args[2];
@@ -690,7 +699,7 @@ public final class ZoneCommands implements CommandExecutor
                 scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Permission_Exists(newPlayerName));
                 return;
             }
-        } 
+        }
         else
         {
             if (subZone.hasPermission(newPlayerName, permission))
@@ -703,7 +712,7 @@ public final class ZoneCommands implements CommandExecutor
         if (subZone == null)
         {
             zone.addPermission(permission, newPlayerName);
-        } 
+        }
         else
         {
             subZone.addPermission(permission, newPlayerName);
@@ -775,25 +784,25 @@ public final class ZoneCommands implements CommandExecutor
             if (permission.getPermissions().requiresOwnerPermission())
             {
                 boolean isAllowed = false;
-                
+
                 if (scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Staff_Override.permissionNode()))
                 {
                     scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + ">>** Staff Override - Owner Permission");
                     isAllowed = true;
                 }
-                
+
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
                 {
                     isAllowed = true;
                 }
-                
+
                 if (!isAllowed)
                 {
                     scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Permission_RequiresOwner(permission));
                     return;
                 }
             }
-        } 
+        }
         else
         {
             if (permission.getPermissions().requiresOwnerPermission())
@@ -848,7 +857,7 @@ public final class ZoneCommands implements CommandExecutor
             }
 
             newPlayerName = (onPlayer == null) ? offPlayer.getName() : onPlayer.getName();
-        } 
+        }
         else
         {
             newPlayerName = args[2];
@@ -862,7 +871,7 @@ public final class ZoneCommands implements CommandExecutor
                 scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Permission_Not_Exists(newPlayerName));
                 return;
             }
-        } 
+        }
         else
         {
             if (!subZone.hasPermission(newPlayerName, permission))
@@ -1119,7 +1128,7 @@ public final class ZoneCommands implements CommandExecutor
                     canDoThis = true;
                 }
             }
-            
+
             if (canDoThis)
             {
                 break;
@@ -1217,7 +1226,7 @@ public final class ZoneCommands implements CommandExecutor
                     canDoThis = true;
                 }
             }
-            
+
             if (!canDoThis)
             {
                 if (scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Staff_Override.permissionNode()))
@@ -1306,7 +1315,7 @@ public final class ZoneCommands implements CommandExecutor
                     canDoThis = true;
                 }
             }
-            
+
             if (canDoThis)
             {
                 break;
@@ -1436,7 +1445,7 @@ public final class ZoneCommands implements CommandExecutor
                     canDoThis = true;
                 }
             }
-            
+
             if (!canDoThis)
             {
                 if (scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Staff_Override.permissionNode()))
@@ -1705,7 +1714,7 @@ public final class ZoneCommands implements CommandExecutor
                 scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Spawn_Not_Public_Town(zone.getName()));
                 return;
             }
-        } 
+        }
         else
         {
             boolean isAllowed = false;
@@ -1813,7 +1822,7 @@ public final class ZoneCommands implements CommandExecutor
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Spawn_Already_Private(zone.getName()));
             return;
         }
-        
+
         if (!scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Staff_Override.permissionNode()))
         {
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().No_Permission());
@@ -1918,7 +1927,7 @@ public final class ZoneCommands implements CommandExecutor
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "Insufficient funds to complete the transaction.");
             return;
         }
-        
+
         EconomyResponse ecoresp = context.getEconomy().withdrawPlayer(scPlayer.getBukkitPlayer().getName(), cost);
         if (!ecoresp.transactionSuccess())
         {
@@ -1988,7 +1997,7 @@ public final class ZoneCommands implements CommandExecutor
         }
 
         scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Block_Purchase_Quote(blocks, cost));
-        
+
         if (context.getEconomy().has(scPlayer.getBukkitPlayer().getName(), cost))
         {
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.GREEN + "You have sufficient money to carry out this transaction.");
@@ -1997,7 +2006,7 @@ public final class ZoneCommands implements CommandExecutor
         {
             double playerBalance = context.getEconomy().getBalance(scPlayer.getBukkitPlayer().getName());
             double requiredMoney = cost - playerBalance;
-            
+
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "You require " + ChatColor.GOLD + context.currencySingular() + requiredMoney + ChatColor.RED + " to carry out this transaction.");
         }
 
@@ -2016,18 +2025,18 @@ public final class ZoneCommands implements CommandExecutor
         }
 
         boolean isAllowed = false;
-        
+
         if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
         {
             isAllowed = true;
-            
+
         }
-        
+
         if (scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Staff_Override.permissionNode()))
         {
             isAllowed = true;
         }
-        
+
         if (!isAllowed)
         {
             if (!zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
@@ -2035,7 +2044,7 @@ public final class ZoneCommands implements CommandExecutor
                 scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().No_Permission());
                 return;
             }
-            
+
             if (!zone.isPublic())
             {
                 scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "Only public towns are allowed to enable PvP zones.");
@@ -2055,7 +2064,7 @@ public final class ZoneCommands implements CommandExecutor
 
             zone.setPvpAllowed(true);
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Pvp_Enabled(zone.getName()));
-        } 
+        }
         else
         {
             if (subZone.isPvpEnabled())

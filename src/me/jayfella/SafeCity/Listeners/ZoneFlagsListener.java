@@ -48,7 +48,8 @@ public final class ZoneFlagsListener implements Listener
 	@EventHandler(priority=EventPriority.HIGH, ignoreCancelled=true)
 	public void onCreatureSpawn(CreatureSpawnEvent event)
 	{
-		// boolean cancelEvent = true;
+		if (!context.isValidWorld(event.getLocation().getWorld().getName()))
+            return;
 
         Location loc = event.getLocation();
 
@@ -102,6 +103,9 @@ public final class ZoneFlagsListener implements Listener
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
 	{
+        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+            return;
+
 		if (!(event.getEntity() instanceof Player))
         {
             return;
@@ -210,9 +214,5 @@ public final class ZoneFlagsListener implements Listener
 
 		event.setCancelled(false);
 	}
-
-
-
-
 
 }

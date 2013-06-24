@@ -273,6 +273,9 @@ public final class SignsListener implements Listener
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event)
     {
+        if (!context.isValidWorld(event.getChunk().getWorld().getName()))
+            return;
+
         Chunk chunk = event.getChunk();
 
         SafeCityZoneCollection zoneCollection = context.getZonesInChunk(chunk.getX(), chunk.getZ());

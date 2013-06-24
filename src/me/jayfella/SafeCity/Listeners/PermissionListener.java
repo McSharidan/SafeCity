@@ -48,58 +48,61 @@ public final class PermissionListener implements Listener
 		this.context = context;
 	}
 
-    @EventHandler 
+    @EventHandler
     public void onHopperPlace(BlockPlaceEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         if (event.getBlock().getType() == Material.HOPPER | event.getBlock().getType() == Material.DROPPER)
         {
-            
+
             Location placedLoc = event.getBlock().getLocation();
             World placedWorld = event.getBlock().getWorld();
-            
+
             // all possible locations...
-            
+
             Location[] allDirections =
             {
                 new Location(placedLoc.getWorld(), placedLoc.getBlockX(), placedLoc.getBlockY() + 1, placedLoc.getBlockZ()),
                 new Location(placedLoc.getWorld(), placedLoc.getBlockX(), placedLoc.getBlockY() - 1, placedLoc.getBlockZ()),
-                
+
                 new Location(placedLoc.getWorld(), placedLoc.getBlockX() - 1, placedLoc.getBlockY(), placedLoc.getBlockZ()),
                 new Location(placedLoc.getWorld(), placedLoc.getBlockX() + 1, placedLoc.getBlockY(), placedLoc.getBlockZ()),
-                
+
                 new Location(placedLoc.getWorld(), placedLoc.getBlockX(), placedLoc.getBlockY(), placedLoc.getBlockZ() + 1),
                 new Location(placedLoc.getWorld(), placedLoc.getBlockX(), placedLoc.getBlockY(), placedLoc.getBlockZ() - 1),
             };
-            
+
             SafeCityZone[] directionalZones =
             {
                 context.getZone(context.toThinLocation(allDirections[0]), placedWorld),
                 context.getZone(context.toThinLocation(allDirections[1]), placedWorld),
-                
+
                 context.getZone(context.toThinLocation(allDirections[2]), placedWorld),
                 context.getZone(context.toThinLocation(allDirections[3]), placedWorld),
-                
+
                 context.getZone(context.toThinLocation(allDirections[4]), placedWorld),
                 context.getZone(context.toThinLocation(allDirections[5]), placedWorld),
             };
-            
+
             SafeCitySubZone[] directionalSubZones =
             {
                 context.getSubZone(context.toThinLocation(allDirections[0]), placedWorld),
                 context.getSubZone(context.toThinLocation(allDirections[1]), placedWorld),
-                
+
                 context.getSubZone(context.toThinLocation(allDirections[2]), placedWorld),
                 context.getSubZone(context.toThinLocation(allDirections[3]), placedWorld),
-                
+
                 context.getSubZone(context.toThinLocation(allDirections[4]), placedWorld),
                 context.getSubZone(context.toThinLocation(allDirections[5]), placedWorld),
             };
 
             SafeCityZone placedZone = context.getZone(context.toThinLocation(placedLoc), placedWorld);
             SafeCitySubZone placedSubZone = context.getSubZone(context.toThinLocation(placedLoc), placedWorld);
-            
+
             boolean mismatch = false;
-            
+
             for (SafeCityZone z : directionalZones)
             {
                 if (z != placedZone)
@@ -108,7 +111,7 @@ public final class PermissionListener implements Listener
                     break;
                 }
             }
-            
+
             if (!mismatch)
             {
                 for (SafeCitySubZone z : directionalSubZones)
@@ -119,22 +122,25 @@ public final class PermissionListener implements Listener
                     }
                 }
             }
-            
+
             if (mismatch)
             {
                 Player player = event.getPlayer();
                 player.sendMessage(ChatColor.RED + "For security reasons, hoppers or droppers cannot be placed on zone edges.");
                 event.setCancelled(true);
             }
-            
+
         }
     }
-    
+
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		if (event.getAction() == Action.LEFT_CLICK_AIR) { return; }
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) { return; }
+
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
 
         SafeCityZone zone = context.getZone(context.toThinLocation(event.getClickedBlock().getLocation()), event.getClickedBlock().getWorld());
 		if (zone == null) { return; }
@@ -244,6 +250,9 @@ public final class PermissionListener implements Listener
 	@EventHandler
     public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event)
 	{
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
 		SafeCityZone zone = context.getZone(context.toThinLocation(event.getRightClicked().getLocation()), event.getRightClicked().getWorld());
 		if (zone == null) { return; }
 
@@ -308,6 +317,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerDamage(EntityDamageByEntityEvent event)
 	{
+        if (!context.isValidWorld(event.getDamager().getWorld().getName()))
+            return;
+
         Player attacker = null;
 	    Entity damageSource = event.getDamager();
 
@@ -407,7 +419,7 @@ public final class PermissionListener implements Listener
                 {
                     return;
                 }
-                
+
 				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
 				{
 					if (p.getPermissions().canKillAllEntities())
@@ -434,6 +446,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onVehicleDamage(VehicleDamageEvent event)
 	{
+        if (!context.isValidWorld(event.getAttacker().getWorld().getName()))
+            return;
+
 		Player attacker = null;
 	    Entity damageSource = event.getAttacker();
 
@@ -522,6 +537,9 @@ public final class PermissionListener implements Listener
             return;
         }
 
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
 		SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
 		if (zone == null) { return; }
 
@@ -585,6 +603,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
 		SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
 		if (zone == null) { return; }
 
@@ -645,6 +666,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onBucketEmpty(PlayerBucketEmptyEvent event)
 	{
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
 		if (event.getBlockClicked() == null || event.getBlockClicked().getType() == Material.AIR) { return; }
 
 		Location waterLocation = event.getBlockClicked().getLocation();
@@ -695,6 +719,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerBucketFill(PlayerBucketFillEvent event)
 	{
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
 		if (event.getBlockClicked() == null || event.getBlockClicked().getType() == Material.AIR) { return; }
 
 		Location waterLocation = event.getBlockClicked().getLocation();
@@ -742,6 +769,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onHanging(HangingPlaceEvent event)
 	{
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
 		if (event.getBlock() == null || event.getBlock().getType() == Material.AIR) { return; }
 
 		SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
@@ -807,6 +837,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onHangingBreak(HangingBreakEvent event)
 	{
+        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+            return;
+
 		if (!(event instanceof HangingBreakByEntityEvent))
 	    {
 			event.setCancelled(true);
@@ -908,6 +941,9 @@ public final class PermissionListener implements Listener
     @EventHandler(ignoreCancelled=true)
     public void onPlayerPortal(PlayerPortalEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         if (event.getCause() != TeleportCause.NETHER_PORTAL)
         {
             return;
@@ -915,38 +951,38 @@ public final class PermissionListener implements Listener
 
         Player player = event.getPlayer();
         ThinLocation playerLoc = context.toThinLocation(player.getLocation());
-        
+
         SafeCityZone zone = context.getZone(playerLoc, player.getWorld());
-        
-        if (zone == null) 
-        { 
+
+        if (zone == null)
+        {
             return;
         }
 
         boolean isAllowed = false;
-        
+
         if (zone.isResident(player.getName()))
         {
             isAllowed = true;
         }
-        
+
         if (zone.hasPermission(player.getName(), ZonePermissionType.Owner))
         {
             isAllowed = true;
         }
-        
+
         if (!isAllowed)
         {
             event.setCancelled(true);
             player.sendMessage(context.getMessageHandler().Portal_Resident_Only(zone.getName()));
         }
-        
+
         /* if (!(zone.isResident(player.getName()) | zone.hasPermission(player.getName(), ZonePermissionType.Owner)))
         {
             event.setCancelled(true);
             player.sendMessage(context.getMessageHandler().Portal_Resident_Only(zone.getName()));
         }*/
-        
+
     }
 
 

@@ -19,12 +19,15 @@ public final class ToolInHandListener implements Listener
 
     public ToolInHandListener(SafeCityContext context)
     {
-	this.context = context;
+        this.context = context;
     }
 
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
     	SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
 
         if ((scPlayer.hasToolInHand(event, SafeCityTool.ZoneInfoTool.material())) && (!(scPlayer.getZoneManager().isResizing() | scPlayer.getZoneManager().isCreatingZone() | scPlayer.getZoneManager().isCreatingSubZone())))
@@ -60,14 +63,17 @@ public final class ToolInHandListener implements Listener
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Create3d_Notify());
         }
     }
-    
+
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e)
+    public void onInventoryClose(InventoryCloseEvent event)
     {
-        SafeCityPlayer scPlayer = context.getPlayer((Player)e.getPlayer());
-        
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
+        SafeCityPlayer scPlayer = context.getPlayer((Player)event.getPlayer());
+
         ItemStack itemInHandStack = scPlayer.getBukkitPlayer().getItemInHand();
-        
+
         if (itemInHandStack.getType() != SafeCityTool.ZoneInfoTool.material())
         {
             scPlayer.getVisualManager().clearVisuals(true);
@@ -77,9 +83,9 @@ public final class ToolInHandListener implements Listener
             scPlayer.getVisualManager().clearVisuals(false);
             scPlayer.getVisualManager().getZoneVisualizer().visualize();
         }
-        
+
     }
-    
+
     @EventHandler
     public void onPlayerPickupItem(final PlayerPickupItemEvent event)
     {
@@ -87,7 +93,7 @@ public final class ToolInHandListener implements Listener
         {
             // check the contents of the players hand on the next tick
             context.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(context.getPlugin(),
-                    
+
                     new Runnable()
                     {
                         @Override
@@ -96,28 +102,28 @@ public final class ToolInHandListener implements Listener
                             if (event.getPlayer().getItemInHand().getType() == SafeCityTool.ZoneInfoTool.material())
                             {
                                 SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-                                
+
                                 scPlayer.getVisualManager().clearVisuals(false);
                                 scPlayer.getVisualManager().getZoneVisualizer().visualize();
                             }
                         }
                     }
-                    
+
                     , 1L);
         }
     }
-    
+
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event)
     {
         SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-        
+
         // throwing a stick
         if (event.getItemDrop().getItemStack().getType() == SafeCityTool.ZoneInfoTool.material() && event.getPlayer().getItemInHand().getType() == Material.AIR)
         {
             scPlayer.getVisualManager().clearVisuals(false);
         }
-        
+
         // throwing a wood shovel
         if (event.getItemDrop().getItemStack().getType() == SafeCityTool.ZoneTool.material() && event.getPlayer().getItemInHand().getType() == Material.AIR)
         {
@@ -132,7 +138,7 @@ public final class ToolInHandListener implements Listener
                 scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Create_Cancel());
             }
         }
-        
+
         // throwing a gold shovel
         if (event.getItemDrop().getItemStack().getType() == SafeCityTool.ZoneTool3d.material() && event.getPlayer().getItemInHand().getType() == Material.AIR)
         {
@@ -148,5 +154,5 @@ public final class ToolInHandListener implements Listener
             }
         }
     }
-    
+
 }

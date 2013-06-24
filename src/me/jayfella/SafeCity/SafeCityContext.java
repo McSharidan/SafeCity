@@ -616,5 +616,21 @@ public final class SafeCityContext
         }
     }
 
+    public boolean isValidWorld(String worldName)
+    {
+        boolean worldState = false;
+
+        for (String world : this.getPluginSettings().getAllowedWorlds())
+        {
+            if (worldName.equalsIgnoreCase(world))
+            {
+                worldState = true;
+                break;
+            }
+        }
+
+        return worldState;
+    }
+
 }
 

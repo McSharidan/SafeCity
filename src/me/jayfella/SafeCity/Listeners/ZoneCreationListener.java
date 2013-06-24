@@ -32,6 +32,9 @@ public final class ZoneCreationListener implements Listener
 		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) { return; }
 		if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) { return; }
 
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
 		SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
 
         if (scPlayer.getCoolDownState()) { return; }
@@ -99,7 +102,7 @@ public final class ZoneCreationListener implements Listener
 					}
 				}
 			}
-            
+
             if (context.getBukkitPermissions().has((World)null, scPlayer.getBukkitPlayer().getName(), PluginPermission.Staff_Override.permissionNode()))
             {
                 scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + ">>** Staff Override");
@@ -110,7 +113,7 @@ public final class ZoneCreationListener implements Listener
             scPlayer.startCoolDown(2L);
 
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().No_Permission());
-            
+
             return false;
 		}
 
@@ -167,7 +170,7 @@ public final class ZoneCreationListener implements Listener
 			scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Mismatch());
 			return;
 		}
-        
+
         ThinLocation[] clickedCorners = context.sortCorners(scPlayer.getZoneManager().getNewZoneLocation1(), scPlayer.getZoneManager().getNewZoneLocation2());
 
         // check if subzone is on the edge of the primary zone (lesser)
@@ -176,15 +179,15 @@ public final class ZoneCreationListener implements Listener
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "Sub-zone cannot be on the edge of the primary zone.");
             return;
         }
-        
+
         // check if subzone is on the edge of the primary zone (greater)
         if (clickedCorners[1].getBlockX() == zone.getGreaterCorner().getBlockX() || clickedCorners[1].getBlockZ() == zone.getGreaterCorner().getBlockZ())
         {
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "Sub-zone cannot be on the edge of the primary zone.");
             return;
         }
-        
-        
+
+
         // 2D SubZone
         if (scPlayer.getBukkitPlayer().getItemInHand().getType() == SafeCityTool.ZoneTool.material())
         {
@@ -232,8 +235,8 @@ public final class ZoneCreationListener implements Listener
             clickedCorners[1] = new ThinLocation(clickedCorners[1].getBlockX(), (scPlayer.getBukkitPlayer().getWorld().getMaxHeight() -1), clickedCorners[1].getBlockZ());
 		}
 
-         
-        
+
+
         SafeCitySubZone newSubZone = new SafeCitySubZone(context, zone.getId(), zone.getFounder(), scPlayer.getBukkitPlayer().getWorld(), clickedCorners[0], clickedCorners[1]);
 
         context.addSubZone(newSubZone);

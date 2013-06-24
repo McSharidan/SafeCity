@@ -25,6 +25,9 @@ public final class ZoneNotifyListener implements Listener
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
         if (scPlayer.getCoolDownState()) { return; }
 

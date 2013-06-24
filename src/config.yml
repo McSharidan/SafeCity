@@ -9,3 +9,7 @@ database:
 general:
   min-zone-distance: 50
   max-zones-per-player: 1
+
+allowed-worlds:
+  - world
+  - world_nether

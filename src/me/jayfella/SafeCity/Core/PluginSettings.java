@@ -1,5 +1,6 @@
 package me.jayfella.SafeCity.Core;
 
+import java.util.List;
 import me.jayfella.SafeCity.SafeCityContext;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -9,15 +10,16 @@ public final class PluginSettings
 	private final SafeCityContext context;
 
     private volatile int zoneIdIncrement;
-    
+
     // zone-related
     private final int minZoneDistance;
     private final int maxPlayerZones;
-    
+    private final String[] allowedWorlds;
+
     // --INDEV
     // private final boolean allowCreeperExplosions;
     // private final boolean FounderLightPortalsOnly;
-    
+
 
     private final DatabaseDetails databaseDetails;
 
@@ -39,12 +41,17 @@ public final class PluginSettings
 
         this.minZoneDistance = fileConfig.getInt("general.min-zone-distance");
         this.maxPlayerZones = fileConfig.getInt("general.max-zones-per-player");
+
+        List<?> worlds = fileConfig.getList("allowed-worlds");
+        this.allowedWorlds = worlds.toArray(new String[worlds.size()]);
 	}
 
 	public int getNewZoneId() { zoneIdIncrement++; return zoneIdIncrement; }
     public void setZoneIncrement(int value) { this.zoneIdIncrement = value; }
 	public int getMinZoneDistance() { return minZoneDistance; }
     public int getMaxZonesPerPlayer() { return this.maxPlayerZones; }
+    public String[] getAllowedWorlds() { return this.allowedWorlds; }
+
     public DatabaseDetails databaseDetails() { return this.databaseDetails; }
 
     public final class DatabaseDetails

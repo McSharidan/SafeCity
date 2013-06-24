@@ -29,6 +29,9 @@ public final class ZoneResizeListener implements Listener
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) { return; }
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) { return; }
 
@@ -75,13 +78,13 @@ public final class ZoneResizeListener implements Listener
             {
                 return true;
             }
-            
+
             if (context.getBukkitPermissions().has((World)null, scPlayer.getBukkitPlayer().getName(), PluginPermission.Staff_Override.permissionNode()))
             {
                 scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + ">>** Staff Override");
                 return true;
             }
-            
+
             return false;
         }
         else
@@ -96,7 +99,7 @@ public final class ZoneResizeListener implements Listener
                     }
                 }
             }
-            
+
             if (context.getBukkitPermissions().has((World)null, scPlayer.getBukkitPlayer().getName(), PluginPermission.Staff_Override.permissionNode()))
             {
                 scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + ">>** Staff Override");

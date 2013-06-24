@@ -27,6 +27,9 @@ public final class ZoneVisualListener implements Listener
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) { return; }
         if (event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) { return; }
 
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
         if (scPlayer.getBukkitPlayer().getItemInHand().getType() != SafeCityTool.ZoneInfoTool.material()) { return; }
 
@@ -35,10 +38,10 @@ public final class ZoneVisualListener implements Listener
         if (zone == null)
         {
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Displaying_Visual());
-            
+
             scPlayer.getVisualManager().clearVisuals(false);
             scPlayer.getVisualManager().getZoneVisualizer().visualize();
-            
+
             return;
         }
 
@@ -54,19 +57,19 @@ public final class ZoneVisualListener implements Listener
         }
     }
 
-    
 
-    
+
+
 
     private void displaySubZoneData(SafeCitySubZone subZone)
     {
 
     }
 
-    
 
-    
 
-    
+
+
+
 
 }

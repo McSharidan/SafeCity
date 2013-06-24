@@ -79,6 +79,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(ignoreCancelled=true)
     public void onTreeGrow(StructureGrowEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         SafeCityZone rootZone = context.getZone(context.toThinLocation(event.getLocation()), event.getLocation().getWorld());
         SafeCitySubZone rootSubZone = context.getSubZone(context.toThinLocation(event.getLocation()), event.getWorld());
 
@@ -99,6 +102,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(ignoreCancelled=true, priority=EventPriority.LOWEST)
     public void onBlockPistonExtend(BlockPistonExtendEvent event)
     {
+        if (!context.isValidWorld(event.getBlock().getWorld().getName()))
+            return;
+
         Block pistonBlock = event.getBlock();
         Block invadedBlock = pistonBlock.getRelative(event.getDirection());
 
@@ -186,6 +192,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockPistonRetract(BlockPistonRetractEvent event)
     {
+        if (!context.isValidWorld(event.getBlock().getWorld().getName()))
+            return;
+
         if (event.isSticky())
         {
            if (event.getRetractLocation().getBlock().getType() == Material.AIR)
@@ -210,6 +219,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(ignoreCancelled=true)
     public void onBlockIgnite(BlockIgniteEvent event)
     {
+        if (!context.isValidWorld(event.getBlock().getWorld().getName()))
+            return;
+
         if (event.getCause() == IgniteCause.SPREAD) { event.setCancelled(true); }
 
         // limit portal creation to owners only
@@ -237,6 +249,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBlockFromTo(BlockFromToEvent event)
     {
+        if (!context.isValidWorld(event.getBlock().getWorld().getName()))
+            return;
+
         Block fromBlock = event.getBlock();
         SafeCityZone fromZone = context.getZone(context.toThinLocation(fromBlock.getLocation()), fromBlock.getWorld());
         SafeCitySubZone fromSubZone = context.getSubZone(context.toThinLocation(fromBlock.getLocation()), fromBlock.getWorld());
@@ -255,6 +270,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(ignoreCancelled=true, priority=EventPriority.LOWEST)
     public void onEntityChangeBlock(EntityChangeBlockEvent event)
     {
+        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+            return;
+
         if (event.getEntityType() == EntityType.ENDERMAN)
         {
             event.setCancelled(true);
@@ -272,12 +290,18 @@ public final class AntiGriefListener implements Listener
     @EventHandler(ignoreCancelled=true, priority=EventPriority.LOWEST)
     public void onEntityExplode(EntityExplodeEvent event)
     {
+        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+            return;
+
         event.blockList().clear();
     }
 
     @EventHandler(priority=EventPriority.LOWEST)
     public void onEntityPickup(EntityChangeBlockEvent event)
     {
+        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+            return;
+
         if ((event.getEntity() instanceof Enderman))
         {
             event.setCancelled(true);
@@ -288,6 +312,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         if (event.getBlock().getType() == Material.TNT)
         {
             event.setCancelled(true);
@@ -297,6 +324,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onTntPrime(ExplosionPrimeEvent event)
     {
+        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+            return;
+
         if (event.getEntity() instanceof TNTPrimed)
         {
             event.setCancelled(true);
@@ -306,18 +336,24 @@ public final class AntiGriefListener implements Listener
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onBlockBurn(BlockBurnEvent event)
     {
+        if (!context.isValidWorld(event.getBlock().getWorld().getName()))
+            return;
+
         event.setCancelled(true);
     }
 
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onCropTrample(PlayerInteractEvent event)
     {
+        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+            return;
+
         if(event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType() == Material.SOIL)
         {
             SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-             
+
             SafeCityZone zone = context.getZone(scPlayer.getLocation(), scPlayer.getBukkitPlayer().getWorld());
-             
+
             if (zone == null)
             {
                 return;
@@ -336,12 +372,12 @@ public final class AntiGriefListener implements Listener
                 {
                     return;
                 }
-                
+
                 if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Farmer))
                 {
                     return;
                 }
-                
+
                 if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Build))
                 {
                     return;
@@ -353,12 +389,12 @@ public final class AntiGriefListener implements Listener
                 {
                     return;
                 }
-                
+
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Farmer))
                 {
                     return;
                 }
-                
+
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Build))
                 {
                     return;
@@ -368,5 +404,5 @@ public final class AntiGriefListener implements Listener
             event.setCancelled(true);
          }
     }
-    
+
 }
