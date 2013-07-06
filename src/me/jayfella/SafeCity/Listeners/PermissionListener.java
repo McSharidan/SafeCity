@@ -985,6 +985,4 @@ public final class PermissionListener implements Listener
 
     }
 
-
-
 }

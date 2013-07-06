@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import me.jayfella.SafeCity.Core.FamilyMember;
 import me.jayfella.SafeCity.Core.ThinLocation;
 import me.jayfella.SafeCity.Core.VisualManager;
 import me.jayfella.SafeCity.Core.ZoneManager;
@@ -16,7 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 
-public final class SafeCityPlayer
+public final class SafeCityPlayer extends FamilyMember
 {
     private final SafeCityContext context;
     private final Player player;
@@ -30,12 +31,11 @@ public final class SafeCityPlayer
 
     // delete zone confirmation
     private boolean deleteConfirmation;
-    
+
     private long registeredTime;
     private long lastLoginTime;
     private long lastLogoutTime;
-    
-    
+
     // new player
     public SafeCityPlayer(SafeCityContext context, Player player)
     {
@@ -46,22 +46,22 @@ public final class SafeCityPlayer
 
         visualManager = new VisualManager(context, this);
         zoneManager = new ZoneManager(this);
-        
+
         context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new MySql_NewPlayer(context, player));
     }
-    
+
     // load player
     public SafeCityPlayer(SafeCityContext context, Player player, long regMillis, long loginMillis, long logoutMillis)
     {
         this.context = context;
-        
+
         this.player = player;
-        
+
         currentLocation = new ThinLocation(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ());
 
         visualManager = new VisualManager(context, this);
         zoneManager = new ZoneManager(this);
-        
+
         this.setRegisterTime(regMillis);
         this.setLastLoginTime(loginMillis);
         this.setLogoutTime(logoutMillis);
@@ -71,35 +71,28 @@ public final class SafeCityPlayer
     public void setRegisterTime(long time)
     {
         this.registeredTime = time;
-        
-        /*StringBuilder statement = new StringBuilder()
-                .append("UPDATE players SET ")
-                .append("registered = '").append(this.registeredTime).append("' ")
-                .append("WHERE playerName = '").append(this.getBukkitPlayer().getName()).append("'");
-		
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
                             .append("UPDATE players SET ")
                             .append("registered = ? ")
                             .append("WHERE playerName = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setLong(1, getRegisterTime());
                     ps.setString(2, getBukkitPlayer().getName());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -122,40 +115,33 @@ public final class SafeCityPlayer
             }
         });
     }
-    
+
     public long getLastLoginTime() { return this.lastLoginTime; }
     public void setLastLoginTime(long time)
     {
         this.lastLoginTime = time;
-        
-        /*StringBuilder statement = new StringBuilder()
-                .append("UPDATE players SET ")
-                .append("lastlogin = '").append(this.lastLoginTime).append("' ")
-                .append("WHERE playerName = '").append(this.getBukkitPlayer().getName()).append("'");
-		
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
                             .append("UPDATE players SET ")
                             .append("lastlogin = ? ")
                             .append("WHERE playerName = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setLong(1, getLastLoginTime());
                     ps.setString(2, getBukkitPlayer().getName());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -178,40 +164,33 @@ public final class SafeCityPlayer
             }
         });
     }
-    
+
     public long getLastLogoutTime() { return this.lastLogoutTime; }
     public void setLogoutTime(long time)
     {
         this.lastLogoutTime = time;
-        
-        /*StringBuilder statement = new StringBuilder()
-                .append("UPDATE players SET ")
-                .append("lastlogout = '").append(this.lastLogoutTime).append("' ")
-                .append("WHERE playerName = '").append(this.getBukkitPlayer().getName()).append("'");
-		
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
                             .append("UPDATE players SET ")
                             .append("lastlogout = ? ")
                             .append("WHERE playerName = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setLong(1, getLastLogoutTime());
                     ps.setString(2, getBukkitPlayer().getName());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -233,18 +212,18 @@ public final class SafeCityPlayer
                 }
             }
         });
-        
+
     }
-    
+
     public boolean isOnline() { return (this.player == null); }
-    
+
     public Player getBukkitPlayer() { return this.player; }
     public ThinLocation getLocation() { return currentLocation; }
     public void setLocation(ThinLocation location) { currentLocation = location; }
 
     public boolean hasConfirmedDelete() { return this.deleteConfirmation; }
     public void setDeleteConfirmation(boolean value) { this.deleteConfirmation = value; }
-    
+
     public void startCoolDown(long ticks)
     {
         isCoolingDown = true;

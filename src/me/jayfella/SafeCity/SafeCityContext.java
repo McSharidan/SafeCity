@@ -86,8 +86,6 @@ public final class SafeCityContext
 		this.mySql.loadZones();
 		this.mySql.loadSubZones();
 
-
-
         this.pluginSettings.setZoneIncrement(this.getMySql().getLastLoadedIncrement());
 
         addAllZonesToHashMap();

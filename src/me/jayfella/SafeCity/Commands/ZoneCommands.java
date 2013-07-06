@@ -2256,6 +2256,12 @@ public final class ZoneCommands implements CommandExecutor
     {
         SafeCityPlayer scPlayer = context.getPlayer((Player) sender);
 
+        if (!scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Create_City.permissionNode()))
+        {
+            scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "You do not have permission to create a primary zone.");
+            return;
+        }
+
         // check if zone already exists
         if (context.getZone(context.toThinLocation(scPlayer.getBukkitPlayer().getLocation()), scPlayer.getBukkitPlayer().getWorld()) != null)
         {
