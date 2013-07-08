@@ -2,11 +2,6 @@ package me.jayfella.SafeCity.Core;
 
 public class PlayerStatistics
 {
-    public PlayerStatistics()
-    {
-
-    }
-
     private int transactionsIn;
     private int transactionsOut;
     private double moneyIn;

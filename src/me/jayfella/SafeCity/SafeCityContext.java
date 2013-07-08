@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import me.jayfella.SafeCity.Commands.FamilyCommands;
 import me.jayfella.SafeCity.Commands.ResidentCommands;
 import me.jayfella.SafeCity.Commands.ZoneCommands;
 import me.jayfella.SafeCity.Core.ChunkLocation;
@@ -106,23 +107,17 @@ public final class SafeCityContext
 		plugin.getServer().getPluginManager().registerEvents(new ZoneNotifyListener(this), plugin);
 		plugin.getServer().getPluginManager().registerEvents(new ToolInHandListener(this), plugin);
 
-		// Zone Permissions
 		plugin.getServer().getPluginManager().registerEvents(new PermissionListener(this), plugin);
-
-		// Zone Flags
 		plugin.getServer().getPluginManager().registerEvents(new ZoneFlagsListener(this), plugin);
-
-		// Anti-Grief
 		plugin.getServer().getPluginManager().registerEvents(new AntiGriefListener(this), plugin);
-
-        // signs
         plugin.getServer().getPluginManager().registerEvents(new SignsListener(this), plugin);
 	}
 
 	private void initializeCommands()
 	{
 		plugin.getCommand("zone").setExecutor(new ZoneCommands(this));
-        plugin.getCommand("resident").setExecutor(new ResidentCommands(this));
+        plugin.getCommand("citizen").setExecutor(new ResidentCommands(this));
+        plugin.getCommand("family").setExecutor(new FamilyCommands(this));
     }
 
 	private boolean initializeVault()

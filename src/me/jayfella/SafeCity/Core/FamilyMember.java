@@ -1,6 +1,6 @@
 package me.jayfella.SafeCity.Core;
 
-public class FamilyMember implements SafeCityFamilyMember
+public class FamilyMember extends PlayerStatistics implements SafeCityFamilyMember
 {
     private int reputation;
 

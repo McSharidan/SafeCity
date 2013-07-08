@@ -446,6 +446,9 @@ public final class PermissionListener implements Listener
 	@EventHandler(ignoreCancelled=true)
 	public void onVehicleDamage(VehicleDamageEvent event)
 	{
+        if (event.getAttacker() == null)
+            return;
+
         if (!context.isValidWorld(event.getAttacker().getWorld().getName()))
             return;
 
