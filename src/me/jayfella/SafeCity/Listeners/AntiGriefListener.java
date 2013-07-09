@@ -79,6 +79,9 @@ public final class AntiGriefListener implements Listener
     @EventHandler(ignoreCancelled=true)
     public void onTreeGrow(StructureGrowEvent event)
     {
+        if (event.getPlayer() == null)
+            return;
+
         if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
             return;
 
