@@ -2093,6 +2093,7 @@ public final class ZoneCommands implements CommandExecutor
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Pvp_Enabled(subZone.getName()));
         }
 
+        scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Item_Purchased((int) cost));
     }
 
     private void pvpDisable(CommandSender sender, Command cmd, String label, String[] args)
