@@ -13,3 +13,8 @@ general:
 allowed-worlds:
   - world
   - world_nether
+  
+prices:
+  public-zone: 15000
+  public-spawn: 7500
+  pvp-zone: 1000

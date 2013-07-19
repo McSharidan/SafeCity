@@ -7,6 +7,7 @@ public enum FriendlyEntity
     Bat(EntityType.BAT),
     Chicken(EntityType.CHICKEN),
     Cow(EntityType.COW),
+    Horse(EntityType.HORSE),
     IronGolem(EntityType.IRON_GOLEM),
     MushroomCow(EntityType.MUSHROOM_COW),
     Ocelot(EntityType.OCELOT),

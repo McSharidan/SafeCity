@@ -1013,7 +1013,7 @@ public final class ZoneCommands implements CommandExecutor
             return;
         }
 
-        double cost = 15000;
+        double cost = context.getPluginSettings().getPublicZoneCost();
 
         if (!context.getEconomy().has(scPlayer.getBukkitPlayer().getName(), cost))
         {
@@ -1783,7 +1783,7 @@ public final class ZoneCommands implements CommandExecutor
             return;
         }
 
-        double cost = 7500;
+        double cost = context.getPluginSettings().getPublicSpawnCost();
 
         if (!context.getEconomy().has(scPlayer.getBukkitPlayer().getName(), cost))
         {
@@ -2052,6 +2052,22 @@ public final class ZoneCommands implements CommandExecutor
             }
         }
 
+        double cost = context.getPluginSettings().getPvpZoneCost();
+
+        if (!context.getEconomy().has(scPlayer.getBukkitPlayer().getName(), cost))
+        {
+            scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Insufficient_Funds());
+            return;
+        }
+
+        // withdraw money from buyer
+        EconomyResponse ecoresp = context.getEconomy().withdrawPlayer(scPlayer.getBukkitPlayer().getName(), cost);
+        if (!ecoresp.transactionSuccess())
+        {
+            scPlayer.getBukkitPlayer().sendMessage("Critical error withdrawing money.");
+            return;
+        }
+        
         SafeCitySubZone subZone = context.getSubZone(scPlayer.getLocation(), scPlayer.getBukkitPlayer().getWorld());
 
         if (subZone == null)

@@ -19,6 +19,7 @@ public final class RenterPermission implements ZonePermissionInterface
 				Material.ANVIL,
 				Material.BED,
 				Material.BOAT,
+                Material.BURNING_FURNACE,
 				Material.BREWING_STAND,
 				Material.CAULDRON,
 				Material.CHEST,

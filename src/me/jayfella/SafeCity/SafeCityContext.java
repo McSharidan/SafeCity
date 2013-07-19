@@ -318,10 +318,12 @@ public final class SafeCityContext
 	{
 		// get player from map
         SafeCityPlayer scP = safeCityPlayers.get(player);
+
         if (scP != null) { return scP; }
 
         // if not exist, try loading the player from the database
         scP = this.getMySql().loadPlayer(player.getName());
+
         if (scP != null)
         {
             safeCityPlayers.put(player, scP);

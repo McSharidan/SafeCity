@@ -1,5 +1,6 @@
 package me.jayfella.SafeCity.Listeners;
 
+import me.jayfella.SafeCity.Core.FriendlyEntity;
 import me.jayfella.SafeCity.Core.ThinLocation;
 import me.jayfella.SafeCity.SafeCityContext;
 import me.jayfella.SafeCity.SafeCitySubZone;
@@ -23,12 +24,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public final class ZoneFlagsListener implements Listener
 {
-	private final SafeCityContext context;
+    private final SafeCityContext context;
 
-	private final EntityType[] friendlyMobs =
+	/*private final EntityType[] friendlyMobs =
 		{
             EntityType.CHICKEN,
             EntityType.COW,
+            EntityType.HORSE,
             EntityType.OCELOT,
             EntityType.IRON_GOLEM,
             EntityType.MUSHROOM_COW,
@@ -37,18 +39,18 @@ public final class ZoneFlagsListener implements Listener
             EntityType.SNOWMAN,
             EntityType.VILLAGER,
             EntityType.WOLF,
-		};
+		};*/
 
 
-	public ZoneFlagsListener(SafeCityContext context)
-	{
-		this.context = context;
-	}
+    public ZoneFlagsListener(SafeCityContext context)
+    {
+        this.context = context;
+    }
 
-	@EventHandler(priority=EventPriority.HIGH, ignoreCancelled=true)
-	public void onCreatureSpawn(CreatureSpawnEvent event)
-	{
-		if (!context.isValidWorld(event.getLocation().getWorld().getName()))
+    @EventHandler(priority=EventPriority.HIGH, ignoreCancelled=true)
+    public void onCreatureSpawn(CreatureSpawnEvent event)
+    {
+        if (!context.isValidWorld(event.getLocation().getWorld().getName()))
             return;
 
         Location loc = event.getLocation();
@@ -65,13 +67,21 @@ public final class ZoneFlagsListener implements Listener
         {
             if (!subZone.allowsMobSpawning())
             {
-                for(int f = 0; f < friendlyMobs.length; f++)
-				{
-		            if(event.getEntityType() == friendlyMobs[f])
-		            {
-		            	return;
-		            }
-		        }
+                /*for(int f = 0; f < FriendlyEntity.values().length; f++)
+                {
+                    if(event.getEntityType() == FriendlyEntity.values()[f])
+                    {
+                        return;
+                    }
+                }*/
+                
+                for (FriendlyEntity f : FriendlyEntity.values())
+                {
+                    if (event.getEntityType() == f.getType())
+                    {
+                        return;
+                    }
+                }
 
                 event.setCancelled(true);
             }
@@ -87,18 +97,26 @@ public final class ZoneFlagsListener implements Listener
         {
             if (!zone.allowsMobSpawning())
             {
-                for(int f = 0; f < friendlyMobs.length; f++)
-				{
-		            if(event.getEntityType() == friendlyMobs[f])
-		            {
-		            	return;
-		            }
-		        }
+                /*for(int f = 0; f < friendlyMobs.length; f++)
+                {
+                    if(event.getEntityType() == friendlyMobs[f])
+                    {
+                        return;
+                    }
+                }*/
+                
+                for (FriendlyEntity f : FriendlyEntity.values())
+                {
+                    if (event.getEntityType() == f.getType())
+                    {
+                        return;
+                    }
+                }
 
                 event.setCancelled(true);
             }
         }
-	}
+    }
 
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event)

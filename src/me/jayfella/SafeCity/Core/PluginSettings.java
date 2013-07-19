@@ -20,11 +20,14 @@ public final class PluginSettings
     // private final boolean allowCreeperExplosions;
     // private final boolean FounderLightPortalsOnly;
 
+    private final double publicZoneCost;
+    private final double publicSpawnCost;
+    private final double pvpZoneCost;
 
     private final DatabaseDetails databaseDetails;
 
-	public PluginSettings(SafeCityContext context)
-	{
+    public PluginSettings(SafeCityContext context)
+    {
         this.context = context;
 
         context.getPlugin().saveDefaultConfig();
@@ -44,13 +47,21 @@ public final class PluginSettings
 
         List<?> worlds = fileConfig.getList("allowed-worlds");
         this.allowedWorlds = worlds.toArray(new String[worlds.size()]);
-	}
+        
+        this.publicZoneCost = fileConfig.getDouble("prices.public-zone");
+        this.publicSpawnCost = fileConfig.getDouble("prices.public-spawn");
+        this.pvpZoneCost = fileConfig.getDouble("prices.pvp-zone");        
+    }
 
-	public int getNewZoneId() { zoneIdIncrement++; return zoneIdIncrement; }
+    public int getNewZoneId() { zoneIdIncrement++; return zoneIdIncrement; }
     public void setZoneIncrement(int value) { this.zoneIdIncrement = value; }
-	public int getMinZoneDistance() { return minZoneDistance; }
+    public int getMinZoneDistance() { return minZoneDistance; }
     public int getMaxZonesPerPlayer() { return this.maxPlayerZones; }
     public String[] getAllowedWorlds() { return this.allowedWorlds; }
+    
+    public double getPublicZoneCost() { return this.publicZoneCost; }
+    public double getPublicSpawnCost() { return this.publicSpawnCost; }
+    public double getPvpZoneCost() { return this.pvpZoneCost; }
 
     public DatabaseDetails databaseDetails() { return this.databaseDetails; }
 

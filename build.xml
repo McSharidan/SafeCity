@@ -11,7 +11,7 @@
             </manifest>
         </jar>
         
-        <copy file="${dist.jar}" todir="E:\\BukkitTest\\Plugins\\"/>
+        <copy file="${dist.jar}" todir="D:\\BukkitTest\\Plugins\\"/>
 	
     </target>
     
