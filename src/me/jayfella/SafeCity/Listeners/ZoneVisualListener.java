@@ -66,11 +66,11 @@ public final class ZoneVisualListener implements Listener
     {
         if (zone.isPublic())
         {
-            return displayPublicZoneData(context, zone);
+            return displayPublicZoneData(zone);
         }
         else
         {
-            return displayPrivateZoneData(context, zone);
+            return displayPrivateZoneData(zone);
         }
     }
 
@@ -125,7 +125,7 @@ public final class ZoneVisualListener implements Listener
         return messages.toArray(new String[messages.size()]);
     }
 
-    private String[] displayPublicZoneData(SafeCityContext context, SafeCityZone zone)
+    private String[] displayPublicZoneData(SafeCityZone zone)
     {
 
         SettlementHierarchy settlementType = zone.getSettlementHierarchy();
@@ -233,7 +233,7 @@ public final class ZoneVisualListener implements Listener
         return messages.toArray(new String[messages.size()]);
     }
 
-    private String[] displayPrivateZoneData(SafeCityContext context, SafeCityZone zone)
+    private String[] displayPrivateZoneData(SafeCityZone zone)
     {
         StringBuilder zoneTitle_Sb = new StringBuilder()
                 .append(ChatColor.DARK_GRAY)
