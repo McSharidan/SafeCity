@@ -28,7 +28,7 @@ public class Details_SubZone_Thread implements Runnable
 		StringBuilder zoneTitle_Sb = new StringBuilder();
 
 		      zoneTitle_Sb.append(ChatColor.DARK_GRAY)
-            .append("-----==] ")
+                        .append("-----==] ")
             .append(ChatColor.WHITE)
             .append(subZone.getName())
 			.append(ChatColor.DARK_GRAY)

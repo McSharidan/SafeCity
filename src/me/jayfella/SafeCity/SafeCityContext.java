@@ -65,14 +65,16 @@ public final class SafeCityContext
     private final ZoneSignManager signManager = new ZoneSignManager(this);
     private final EstateManager estateManager = new EstateManager(this);
 
-	public SafeCityContext(SafeCityPlugin plugin)
-	{
-		this.plugin = plugin;
+    private ZoneVisualListener zoneVisualListener;
 
-		boolean vaultPresent = initializeVault();
+    public SafeCityContext(SafeCityPlugin plugin)
+    {
+        this.plugin = plugin;
+
+        boolean vaultPresent = initializeVault();
 
         this.economy = initializeEconomy();
-		this.bukkitPermission = initializePermissions();
+        this.bukkitPermission = initializePermissions();
 
         this.pluginSettings = new PluginSettings(this);
 
@@ -84,8 +86,8 @@ public final class SafeCityContext
             return;
         }
 
-		this.mySql.loadZones();
-		this.mySql.loadSubZones();
+        this.mySql.loadZones();
+        this.mySql.loadSubZones();
 
         this.pluginSettings.setZoneIncrement(this.getMySql().getLastLoadedIncrement());
 
@@ -93,104 +95,107 @@ public final class SafeCityContext
         addAllSubZonesToHashMap();
 
         initializeCommands();
-		registerListeners();
 
-		startRentCycleThread();
-	}
+        this.zoneVisualListener = new ZoneVisualListener(this);
+        registerListeners();
 
-	private void registerListeners()
-	{
-		plugin.getServer().getPluginManager().registerEvents(new PlayerPresenceListener(this), plugin);
-		plugin.getServer().getPluginManager().registerEvents(new ZoneResizeListener(this), plugin);
-		plugin.getServer().getPluginManager().registerEvents(new ZoneCreationListener(this), plugin);
-		plugin.getServer().getPluginManager().registerEvents(new ZoneVisualListener(this), plugin);
-		plugin.getServer().getPluginManager().registerEvents(new ZoneNotifyListener(this), plugin);
-		plugin.getServer().getPluginManager().registerEvents(new ToolInHandListener(this), plugin);
+        startRentCycleThread();
+    }
 
-		plugin.getServer().getPluginManager().registerEvents(new PermissionListener(this), plugin);
-		plugin.getServer().getPluginManager().registerEvents(new ZoneFlagsListener(this), plugin);
-		plugin.getServer().getPluginManager().registerEvents(new AntiGriefListener(this), plugin);
+    private void registerListeners()
+    {
+        plugin.getServer().getPluginManager().registerEvents(new PlayerPresenceListener(this), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ZoneResizeListener(this), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ZoneCreationListener(this), plugin);
+        plugin.getServer().getPluginManager().registerEvents(this.zoneVisualListener, plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ZoneNotifyListener(this), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ToolInHandListener(this), plugin);
+
+        plugin.getServer().getPluginManager().registerEvents(new PermissionListener(this), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ZoneFlagsListener(this), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new AntiGriefListener(this), plugin);
         plugin.getServer().getPluginManager().registerEvents(new SignsListener(this), plugin);
-	}
+    }
 
-	private void initializeCommands()
-	{
-		plugin.getCommand("zone").setExecutor(new ZoneCommands(this));
+    private void initializeCommands()
+    {
+        plugin.getCommand("zone").setExecutor(new ZoneCommands(this));
         plugin.getCommand("citizen").setExecutor(new ResidentCommands(this));
         plugin.getCommand("family").setExecutor(new FamilyCommands(this));
     }
 
-	private boolean initializeVault()
-	{
-		boolean vaultPresent = (plugin.getServer().getPluginManager().getPlugin("Vault") != null);
+    private boolean initializeVault()
+    {
+        boolean vaultPresent = (plugin.getServer().getPluginManager().getPlugin("Vault") != null);
 
-		if (vaultPresent)
-		{
-			plugin.getLogger().info("Vault detected and enabled.");
-
+        if (vaultPresent)
+        {
+            plugin.getLogger().info("Vault detected and enabled.");
             return true;
-		}
-		else
-		{
-			plugin.getLogger().info("Vault NOT PRESENT.");
-			plugin.getLogger().warning("Disabling plugin.");
+        }
+        else
+        {
+            plugin.getLogger().info("Vault NOT PRESENT.");
+            plugin.getLogger().warning("Disabling plugin.");
 
-			plugin.getPluginLoader().disablePlugin(plugin);
+            plugin.getPluginLoader().disablePlugin(plugin);
 
             return false;
-		}
-	}
+        }
+    }
 
-	private Economy initializeEconomy()
-	{
-		RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
+    private Economy initializeEconomy()
+    {
+        RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
 
-		if (rsp == null)
-		{
-			plugin.getLogger().info("Compatible Economy plugin NOT PRESENT.");
-			plugin.getLogger().warning("Disabling plugin.");
+        if (rsp == null)
+        {
+            plugin.getLogger().info("Compatible Economy plugin NOT PRESENT.");
+            plugin.getLogger().warning("Disabling plugin.");
 
-			plugin.getPluginLoader().disablePlugin(plugin);
-			return null;
-		}
+            plugin.getPluginLoader().disablePlugin(plugin);
+            return null;
+        }
 
 
-		Economy econ = (Economy)rsp.getProvider();
+        Economy econ = (Economy)rsp.getProvider();
 
-		if (econ != null)
-		{
-			plugin.getLogger().log(Level.INFO, "Using Economy: {0}", econ.getName());
-		}
-		else
-		{
-			plugin.getLogger().warning("No compatible economy plugin detected [Vault].");
-			plugin.getLogger().warning("Disabling plugin.");
-			plugin.getPluginLoader().disablePlugin(plugin);
-		}
+        if (econ != null)
+        {
+            plugin.getLogger().log(Level.INFO, "Using Economy: {0}", econ.getName());
+        }
+        else
+        {
+            plugin.getLogger().warning("No compatible economy plugin detected [Vault].");
+            plugin.getLogger().warning("Disabling plugin.");
+            plugin.getPluginLoader().disablePlugin(plugin);
+        }
 
         return econ;
     }
 
-	private Permission initializePermissions()
-	{
-		RegisteredServiceProvider<Permission> rsp = plugin.getServer().getServicesManager().getRegistration(Permission.class);
-		Permission bPermission = (Permission)rsp.getProvider();
+    private Permission initializePermissions()
+    {
+        RegisteredServiceProvider<Permission> rsp = plugin.getServer().getServicesManager().getRegistration(Permission.class);
+        Permission bPermission = (Permission)rsp.getProvider();
 
-		if (bPermission != null)
-		{
-			plugin.getLogger().log(Level.INFO, "Using Permissions: {0}", bPermission.getName());
-		}
-		else
-		{
-			plugin.getLogger().warning("No compatible permissions plugin detected [Vault].");
-			plugin.getLogger().warning("Disabling plugin.");
-			plugin.getPluginLoader().disablePlugin(plugin);
+        if (bPermission != null)
+        {
+            plugin.getLogger().log(Level.INFO, "Using Permissions: {0}", bPermission.getName());
+        }
+        else
+        {
+            plugin.getLogger().warning("No compatible permissions plugin detected [Vault].");
+            plugin.getLogger().warning("Disabling plugin.");
+            plugin.getPluginLoader().disablePlugin(plugin);
 
             return null;
-		}
+        }
 
         return bPermission;
-	}
+    }
+
+    public ZoneVisualListener getZoneVisualListener() { return this.zoneVisualListener; }
 
     private void addAllZonesToHashMap()
     {
@@ -215,41 +220,41 @@ public final class SafeCityContext
     }
 
     private void startRentCycleThread()
-	{
-		this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), new RentCycleThread(this), 60L, 200L);
-	}
+    {
+        this.getPlugin().getServer().getScheduler().runTaskTimerAsynchronously(this.getPlugin(), new RentCycleThread(this), 60L, 200L);
+    }
 
-	private MySql initializeDatabase() { return new MySql(this); }
+    private MySql initializeDatabase() { return new MySql(this); }
 
     public MySql getMySql() { return mySql; }
-	public ConsoleCommandSender getConsole() { return plugin.getServer().getConsoleSender(); }
-	public Logger getLogger() { return plugin.getLogger(); }
+    public ConsoleCommandSender getConsole() { return plugin.getServer().getConsoleSender(); }
+    public Logger getLogger() { return plugin.getLogger(); }
     public Permission getBukkitPermissions() { return this.bukkitPermission; }
     public ZoneSignManager getSignManager() { return this.signManager; }
     public EstateManager getEstateManager() { return this.estateManager; }
-	public SafeCityPlugin getPlugin() { return plugin; }
-	public Economy getEconomy() { return economy; }
-	public PluginSettings getPluginSettings() { return pluginSettings; }
+    public SafeCityPlugin getPlugin() { return plugin; }
+    public Economy getEconomy() { return economy; }
+    public PluginSettings getPluginSettings() { return pluginSettings; }
     public MessageHandler getMessageHandler() { return messageHandler; }
     public char currencySingular() { return '$'; }
 
-	public List<SafeCityZone> getZones() { return zones; }
-	public List<SafeCitySubZone> getSubZones() { return this.subZones; }
+    public List<SafeCityZone> getZones() { return zones; }
+    public List<SafeCitySubZone> getSubZones() { return this.subZones; }
 
     public void addZone(SafeCityZone zone) { this.zones.add(zone);  }
     public void removeZone(SafeCityZone zone)
     {
         // remove the sign
-            if (zone.getInfoSignLocation() != null)
+        if (zone.getInfoSignLocation() != null)
+        {
+            if (zone.getInfoSign() != null)
             {
-                if (zone.getInfoSign() != null)
-                {
-                    Location signLoc = new Location(zone.getWorld(), zone.getInfoSignLocation().getBlockX(), zone.getInfoSignLocation().getBlockY(), zone.getInfoSignLocation().getBlockZ());
+                Location signLoc = new Location(zone.getWorld(), zone.getInfoSignLocation().getBlockX(), zone.getInfoSignLocation().getBlockY(), zone.getInfoSignLocation().getBlockZ());
 
-                    zone.getWorld().getBlockAt(signLoc).setType(Material.AIR);
-                    zone.getWorld().dropItem(signLoc, new ItemStack(Material.SIGN));
-                }
+                zone.getWorld().getBlockAt(signLoc).setType(Material.AIR);
+                zone.getWorld().dropItem(signLoc, new ItemStack(Material.SIGN));
             }
+        }
 
         this.zones.remove(zone);
     }
@@ -312,11 +317,11 @@ public final class SafeCityContext
         return subZoneMap.get(chunkLocation);
     }
 
-	public Map<Player, SafeCityPlayer> getPlayers()	{ return safeCityPlayers; }
+    public Map<Player, SafeCityPlayer> getPlayers()	{ return safeCityPlayers; }
 
     public SafeCityPlayer getPlayer(Player player)
-	{
-		// get player from map
+    {
+        // get player from map
         SafeCityPlayer scP = safeCityPlayers.get(player);
 
         if (scP != null) { return scP; }
@@ -331,10 +336,10 @@ public final class SafeCityContext
         }
 
         // if not exist, create a new player, and add them to the map
-		SafeCityPlayer p = new SafeCityPlayer(this, player);
+        SafeCityPlayer p = new SafeCityPlayer(this, player);
         safeCityPlayers.put(player, p);
-		return p;
-	}
+        return p;
+    }
 
 
     public SafeCityOfflinePlayer getOfflinePlayer(String playerName)
@@ -370,50 +375,50 @@ public final class SafeCityContext
         return difference.toString();
     }
 
-	public void removePlayer(Player player) { safeCityPlayers.remove(player); }
+    public void removePlayer(Player player) { safeCityPlayers.remove(player); }
 
-	public ThinLocation[] sortCorners(ThinLocation lesserCorner, ThinLocation greaterCorner)
-	{
-		int smallestX = Math.min(lesserCorner.getBlockX(), greaterCorner.getBlockX());
-		int largestX = Math.max(lesserCorner.getBlockX(), greaterCorner.getBlockX());
+    public ThinLocation[] sortCorners(ThinLocation lesserCorner, ThinLocation greaterCorner)
+    {
+        int smallestX = Math.min(lesserCorner.getBlockX(), greaterCorner.getBlockX());
+        int largestX = Math.max(lesserCorner.getBlockX(), greaterCorner.getBlockX());
 
-		int smallestY = Math.min(lesserCorner.getBlockY(), greaterCorner.getBlockY());
-		int largestY = Math.max(lesserCorner.getBlockY(), greaterCorner.getBlockY());
+        int smallestY = Math.min(lesserCorner.getBlockY(), greaterCorner.getBlockY());
+        int largestY = Math.max(lesserCorner.getBlockY(), greaterCorner.getBlockY());
 
-		int smallestZ = Math.min(lesserCorner.getBlockZ(), greaterCorner.getBlockZ());
-		int largestZ = Math.max(lesserCorner.getBlockZ(), greaterCorner.getBlockZ());
+        int smallestZ = Math.min(lesserCorner.getBlockZ(), greaterCorner.getBlockZ());
+        int largestZ = Math.max(lesserCorner.getBlockZ(), greaterCorner.getBlockZ());
 
-		ThinLocation bottomLeft = new ThinLocation(smallestX, smallestY, smallestZ);
-		ThinLocation topRight = new ThinLocation(largestX, largestY, largestZ);
+        ThinLocation bottomLeft = new ThinLocation(smallestX, smallestY, smallestZ);
+        ThinLocation topRight = new ThinLocation(largestX, largestY, largestZ);
 
-		return new ThinLocation[] { bottomLeft, topRight };
-	}
+        return new ThinLocation[] { bottomLeft, topRight };
+    }
 
-	public boolean isInsideArea(ThinLocation point, ThinLocation lesserCorner, ThinLocation greaterCorner)
-	{
-		boolean xIsInside = (point.getBlockX() >= lesserCorner.getBlockX() && point.getBlockX() <= greaterCorner.getBlockX());
-		boolean yIsInside = (point.getBlockY() >= lesserCorner.getBlockY() && point.getBlockY() <= greaterCorner.getBlockY());
-		boolean zIsInside = (point.getBlockZ() >= lesserCorner.getBlockZ() && point.getBlockZ() <= greaterCorner.getBlockZ());
+    public boolean isInsideArea(ThinLocation point, ThinLocation lesserCorner, ThinLocation greaterCorner)
+    {
+        boolean xIsInside = (point.getBlockX() >= lesserCorner.getBlockX() && point.getBlockX() <= greaterCorner.getBlockX());
+        boolean yIsInside = (point.getBlockY() >= lesserCorner.getBlockY() && point.getBlockY() <= greaterCorner.getBlockY());
+        boolean zIsInside = (point.getBlockZ() >= lesserCorner.getBlockZ() && point.getBlockZ() <= greaterCorner.getBlockZ());
 
-		return (xIsInside && yIsInside && zIsInside);
-	}
+        return (xIsInside && yIsInside && zIsInside);
+    }
 
     public SafeCityZone isTownTooClose(SafeCityPlayer scPlayer, Location location)
-	{
-		int minX = location.getBlockX() - getPluginSettings().getMinZoneDistance();
-		int maxX = location.getBlockX() + getPluginSettings().getMinZoneDistance();
+    {
+        int minX = location.getBlockX() - getPluginSettings().getMinZoneDistance();
+        int maxX = location.getBlockX() + getPluginSettings().getMinZoneDistance();
 
-		int minZ = location.getBlockZ() - getPluginSettings().getMinZoneDistance();
-		int maxZ = location.getBlockZ() + getPluginSettings().getMinZoneDistance();
+        int minZ = location.getBlockZ() - getPluginSettings().getMinZoneDistance();
+        int maxZ = location.getBlockZ() + getPluginSettings().getMinZoneDistance();
 
         int y = location.getBlockY();
 
         World world = location.getWorld();
 
-		for (int x = minX; x <= maxX; x++)
-		{
-			for (int z = minZ; z <= maxZ; z++)
-			{
+        for (int x = minX; x <= maxX; x++)
+        {
+            for (int z = minZ; z <= maxZ; z++)
+            {
                 ChunkLocation chunkLoc = new ChunkLocation(x >> 4, z >> 4);
                 SafeCityZoneCollection zoneCollection = zoneMap.get(chunkLoc);
 
@@ -430,11 +435,11 @@ public final class SafeCityContext
                         return zone;
                     }
                 }
-			}
-		}
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
     public ThinLocation toThinLocation(Location location)
     {
@@ -442,8 +447,8 @@ public final class SafeCityContext
     }
 
     public boolean isOverlap(ThinLocation rect1Lesser, ThinLocation rect1Greater, ThinLocation rect2Lesser, ThinLocation rect2Greater)
-	{
-		// 2 engulfed 1
+    {
+        // 2 engulfed 1
         boolean engulfed1X = (rect2Lesser.getBlockX() >= rect1Lesser.getBlockX() && rect2Greater.getBlockX() <= rect1Greater.getBlockX());
         boolean engulfed1Y = (rect2Lesser.getBlockY() >= rect1Lesser.getBlockY() && rect2Greater.getBlockY() <= rect1Greater.getBlockY());
         boolean engulfed1Z = (rect2Lesser.getBlockZ() >= rect1Lesser.getBlockZ() && rect2Greater.getBlockZ() <= rect1Greater.getBlockZ());
@@ -471,7 +476,7 @@ public final class SafeCityContext
         }
 
         return false;
-	}
+    }
 
     public void addNewZoneToMap(SafeCityZone zone)
     {

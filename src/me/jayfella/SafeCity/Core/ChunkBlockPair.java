@@ -55,7 +55,7 @@ public final class ChunkBlockPair
     }
 
     private void addBlockToPacket(boolean isRemoving, int x, int y, int z, int blockId, int metadata)
-	{
+    {
         if (dirtyCount < 63)
         {
             if (!isRemoving) { this.blockChanges.add(new ThinLocation(x, y, z)); }

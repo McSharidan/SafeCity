@@ -1,9 +1,6 @@
 package me.jayfella.SafeCity.Runnables;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 import me.jayfella.SafeCity.Core.ChunkBlockPair;
 import me.jayfella.SafeCity.Core.ThinLocation;
 import me.jayfella.SafeCity.Core.VisualManager;
@@ -11,7 +8,6 @@ import me.jayfella.SafeCity.SafeCitySubZone;
 import me.jayfella.SafeCity.SafeCitySubZoneCollection;
 import me.jayfella.SafeCity.SafeCityZone;
 import me.jayfella.SafeCity.SafeCityZoneCollection;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 
@@ -62,10 +58,10 @@ public class ZoneVisualizer implements Runnable
             for (int z = minViewChunkZ; z <= maxViewChunkZ; z++)
             {
                 ChunkBlockPair cbp = visualManager.getActiveVisuals()[count];
-                
+
                 // needs to be synchronous
                 cbp.setData(x, z);
-                
+
                 int minX = x << 4;
                 int minZ = z << 4;
 
