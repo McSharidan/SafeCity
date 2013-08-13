@@ -10,7 +10,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.ThrownPotion;
@@ -20,27 +19,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-
-
 public final class ZoneFlagsListener implements Listener
 {
     private final SafeCityContext context;
-
-	/*private final EntityType[] friendlyMobs =
-		{
-            EntityType.CHICKEN,
-            EntityType.COW,
-            EntityType.HORSE,
-            EntityType.OCELOT,
-            EntityType.IRON_GOLEM,
-            EntityType.MUSHROOM_COW,
-            EntityType.PIG,
-            EntityType.SHEEP,
-            EntityType.SNOWMAN,
-            EntityType.VILLAGER,
-            EntityType.WOLF,
-		};*/
-
 
     public ZoneFlagsListener(SafeCityContext context)
     {
@@ -67,14 +48,6 @@ public final class ZoneFlagsListener implements Listener
         {
             if (!subZone.allowsMobSpawning())
             {
-                /*for(int f = 0; f < FriendlyEntity.values().length; f++)
-                {
-                    if(event.getEntityType() == FriendlyEntity.values()[f])
-                    {
-                        return;
-                    }
-                }*/
-                
                 for (FriendlyEntity f : FriendlyEntity.values())
                 {
                     if (event.getEntityType() == f.getType())
@@ -97,14 +70,6 @@ public final class ZoneFlagsListener implements Listener
         {
             if (!zone.allowsMobSpawning())
             {
-                /*for(int f = 0; f < friendlyMobs.length; f++)
-                {
-                    if(event.getEntityType() == friendlyMobs[f])
-                    {
-                        return;
-                    }
-                }*/
-                
                 for (FriendlyEntity f : FriendlyEntity.values())
                 {
                     if (event.getEntityType() == f.getType())
@@ -185,8 +150,6 @@ public final class ZoneFlagsListener implements Listener
         {
             return;
         }
-
-
 		SafeCityZone attackerZone = context.getZone(context.toThinLocation(attacker.getLocation()), attacker.getWorld());
 		SafeCityZone defenderZone = context.getZone(context.toThinLocation(defender.getLocation()), defender.getWorld());
 

@@ -96,6 +96,7 @@ public final class FarmerPermission implements ZonePermissionInterface
                 EntityType.SHEEP,
                 EntityType.SQUID,
                 EntityType.MINECART,
+                EntityType.HORSE,
             };
 	}
 
@@ -108,6 +109,7 @@ public final class FarmerPermission implements ZonePermissionInterface
                 EntityType.SHEEP,
                 EntityType.MINECART,
                 EntityType.MUSHROOM_COW,
+                EntityType.HORSE,
             };
 	}
 

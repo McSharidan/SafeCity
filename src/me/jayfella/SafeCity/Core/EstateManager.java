@@ -86,7 +86,7 @@ public final class EstateManager
 
         // give money to seller
         // TODO: Give money back to buyer if rent fails
-        ecoresp = context.getEconomy().depositPlayer(scPlayer.getBukkitPlayer().getName(), (subZone == null) ? zone.getSalePrice() : subZone.getSalePrice());
+        ecoresp = context.getEconomy().depositPlayer(zone.getFounder(), (subZone == null) ? zone.getSalePrice() : subZone.getSalePrice());
         if (!ecoresp.transactionSuccess())
         {
             scPlayer.getBukkitPlayer().sendMessage(ChatColor.RED + "Critical error depositing money. Transaction failed!");
