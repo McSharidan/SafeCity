@@ -9,11 +9,12 @@ database:
 general:
   min-zone-distance: 50
   max-zones-per-player: 1
+  wilderness-pvp: false
 
 allowed-worlds:
   - world
   - world_nether
-  
+
 prices:
   public-zone: 15000
   public-spawn: 7500

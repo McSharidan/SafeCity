@@ -1,6 +1,6 @@
 name: SafeCity
 main: me.jayfella.SafeCity.SafeCityPlugin
-version: 1.0.5
+version: 1.0.6
 author: jayfella
 depend: [ Vault, c3p0Extension ]
 
@@ -24,40 +24,3 @@ permissions:
     safecity.staff:
         description: Staff override
         default: op
-
-    # old permissions
-    # safecity.staff:
-    #     description: Staff override
-    #     default: false
-    # safecity.property:
-    #     description: Ability to buy, sell and rent zones
-    #     default: true
-    #     children:
-    #         safecity.property.buy: true
-    #         safecity.property.sell: true
-    #         safecity.property.rent: true
-    # safecity.namezone:
-    #     description: Ability to name and rename zones
-    #     default: true
-    #     children:
-    #         safecity.namezone.primary: true
-    #         safecity.namezone.renameprimary: true
-    #         safecity.namezone.namesub: true
-    #         safecity.namezone.renamesub: true
-    # safecity.delete:
-    #     description: Allow players to delete zones
-    #     default: true
-    #     children:
-    #         safecity.delete.primary: true
-    #         safecity.delete.sub: true
-    # safecity.assistant:
-    #     description: Allow players to add or remove assistants from a zone
-    #     default: true
-    #     children:
-    #         safecity.assistant.add: true
-    #         safecity.assistant.remove: true
-    # safecity.permission:
-    #     description: Allow certain permission for other players in a zone
-    #     default: true
-    #     children:
-    #         safecity.permission.build: true
