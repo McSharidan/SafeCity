@@ -83,117 +83,115 @@ public final class ZoneFlagsListener implements Listener
         }
     }
 
-	@EventHandler
-	public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
-	{
+    @EventHandler
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
+    {
         if (!context.isValidWorld(event.getEntity().getWorld().getName()))
             return;
 
-		if (!(event.getEntity() instanceof Player))
+        if (!(event.getEntity() instanceof Player))
         {
             return;
         }
 
-		Player defender = (Player)event.getEntity();
+        Player defender = (Player)event.getEntity();
 
-		Player attacker = null;
-	    Entity damageSource = event.getDamager();
+        Player attacker = null;
+        Entity damageSource = event.getDamager();
 
-		if ((damageSource instanceof Player))
-	    {
-	    	attacker = (Player)damageSource;
-	    }
-	    else if ((damageSource instanceof Arrow))
-	    {
-	    	Arrow arrow = (Arrow)damageSource;
+        if ((damageSource instanceof Player))
+        {
+            attacker = (Player)damageSource;
+        }
+        else if ((damageSource instanceof Arrow))
+        {
+            Arrow arrow = (Arrow)damageSource;
 
-	    	if ((arrow.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)arrow.getShooter();
-	    	}
-	    }
-	    else if ((damageSource instanceof ThrownPotion))
-	    {
-	    	ThrownPotion potion = (ThrownPotion)damageSource;
+            if ((arrow.getShooter() instanceof Player))
+            {
+                attacker = (Player)arrow.getShooter();
+            }
+        }
+        else if ((damageSource instanceof ThrownPotion))
+        {
+            ThrownPotion potion = (ThrownPotion)damageSource;
 
-	    	if ((potion.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)potion.getShooter();
-	    	}
+            if ((potion.getShooter() instanceof Player))
+            {
+                attacker = (Player)potion.getShooter();
+            }
+        }
+        else if ((damageSource instanceof Snowball))
+        {
+            Snowball snowball = (Snowball)damageSource;
 
-	    }
-	    else if ((damageSource instanceof Snowball))
-	    {
-	    	Snowball snowball = (Snowball)damageSource;
+            if ((snowball.getShooter() instanceof Player))
+            {
+                    attacker = (Player)snowball.getShooter();
+            }
+        }
+        else if ((damageSource instanceof Egg))
+        {
+            Egg egg = (Egg)damageSource;
 
-	    	if ((snowball.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)snowball.getShooter();
-	    	}
-	    }
-	    else if ((damageSource instanceof Egg))
-	    {
-	    	Egg egg = (Egg)damageSource;
+            if ((egg.getShooter() instanceof Player))
+            {
+                    attacker = (Player)egg.getShooter();
+            }
+        }
 
-	    	if ((egg.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)egg.getShooter();
-	    	}
-	    }
-
-	    if (attacker == null)
+        if (attacker == null || (!(attacker instanceof Player)))
         {
             return;
         }
 
-	    if (!(attacker instanceof Player))
+        SafeCityZone attackerZone = context.getZone(context.toThinLocation(attacker.getLocation()), attacker.getWorld());
+        SafeCityZone defenderZone = context.getZone(context.toThinLocation(defender.getLocation()), defender.getWorld());
+
+        // if wilderness
+        if (attackerZone == null && defenderZone == null)
         {
+            if (!context.getPluginSettings().pvpInWilderness())
+                event.setCancelled(true);
+
             return;
         }
-		SafeCityZone attackerZone = context.getZone(context.toThinLocation(attacker.getLocation()), attacker.getWorld());
-		SafeCityZone defenderZone = context.getZone(context.toThinLocation(defender.getLocation()), defender.getWorld());
 
-		if (attackerZone == null || defenderZone == null)
-		{
-			event.setCancelled(true);
-			return;
-		}
+        // both must be in the same place...
+        if (attackerZone != defenderZone)
+        {
+            event.setCancelled(true);
+            return;
+        }
 
-		// both must be in the same place...
-		if (attackerZone != defenderZone)
-		{
-			event.setCancelled(true);
-			return;
-		}
+        SafeCitySubZone attackerSubZone = context.getSubZone(context.toThinLocation(attacker.getLocation()), attacker.getWorld());
+        SafeCitySubZone defenderSubZone = context.getSubZone(context.toThinLocation(defender.getLocation()), defender.getWorld());
 
-		SafeCitySubZone attackerSubZone = context.getSubZone(context.toThinLocation(attacker.getLocation()), attacker.getWorld());
-		SafeCitySubZone defenderSubZone = context.getSubZone(context.toThinLocation(defender.getLocation()), defender.getWorld());
+        // both must be in the same place...
+        if (attackerSubZone != defenderSubZone)
+        {
+            event.setCancelled(true);
+            return;
+        }
 
-		// both must be in the same place...
-		if (attackerSubZone != defenderSubZone)
-		{
-			event.setCancelled(true);
-			return;
-		}
+        if (attackerSubZone == null)
+        {
+            if (!attackerZone.isPvpEnabled())
+            {
+                event.setCancelled(true);
+                return;
+            }
+        }
+        else
+        {
+            if (!attackerSubZone.isPvpEnabled())
+            {
+                event.setCancelled(true);
+                return;
+            }
+        }
 
-		if (attackerSubZone == null)
-		{
-			if (!attackerZone.isPvpEnabled())
-			{
-				event.setCancelled(true);
-				return;
-			}
-		}
-		else
-		{
-			if (!attackerSubZone.isPvpEnabled())
-			{
-				event.setCancelled(true);
-				return;
-			}
-		}
-
-		event.setCancelled(false);
-	}
+        event.setCancelled(false);
+    }
 
 }

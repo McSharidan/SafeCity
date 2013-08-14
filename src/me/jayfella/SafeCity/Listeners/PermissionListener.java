@@ -133,218 +133,216 @@ public final class PermissionListener implements Listener
         }
     }
 
-	@EventHandler(ignoreCancelled=true)
-	public void onPlayerInteract(PlayerInteractEvent event)
-	{
-		if (event.getAction() == Action.LEFT_CLICK_AIR) { return; }
+    @EventHandler(ignoreCancelled=true)
+    public void onPlayerInteract(PlayerInteractEvent event)
+    {
+        if (event.getAction() == Action.LEFT_CLICK_AIR) { return; }
         if (event.getAction() == Action.LEFT_CLICK_BLOCK) { return; }
 
-        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
-            return;
+    if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+        return;
 
-        SafeCityZone zone = context.getZone(context.toThinLocation(event.getClickedBlock().getLocation()), event.getClickedBlock().getWorld());
-		if (zone == null) { return; }
+    SafeCityZone zone = context.getZone(context.toThinLocation(event.getClickedBlock().getLocation()), event.getClickedBlock().getWorld());
+            if (zone == null) { return; }
 
-		Material clickedItem = event.getClickedBlock().getType();
+            Material clickedItem = event.getClickedBlock().getType();
 
-		boolean isAccessBlock = (
-				clickedItem == Material.ANVIL
-				|| clickedItem == Material.BED
-				|| clickedItem == Material.BOAT
-				|| clickedItem == Material.BREWING_STAND
-                || clickedItem == Material.BURNING_FURNACE
-				|| clickedItem == Material.CAULDRON
-				|| clickedItem == Material.CHEST
-				|| clickedItem == Material.DISPENSER
-				|| clickedItem == Material.ENDER_CHEST
-				|| clickedItem == Material.ENCHANTMENT_TABLE
-                || clickedItem == Material.FENCE_GATE
-				|| clickedItem == Material.FURNACE
-				|| clickedItem == Material.MINECART
-				|| clickedItem == Material.POWERED_MINECART
-				|| clickedItem == Material.STORAGE_MINECART
-				|| clickedItem == Material.TRAP_DOOR
-				|| clickedItem == Material.WOODEN_DOOR
-				|| clickedItem == Material.WORKBENCH
-				|| clickedItem == Material.WOOD_BUTTON
-				|| clickedItem == Material.STONE_BUTTON
-                || clickedItem == Material.TRAPPED_CHEST
-				|| clickedItem == Material.LEVER
-				|| clickedItem == Material.STONE_PLATE
-				|| clickedItem == Material.WOOD_PLATE
-                || clickedItem == Material.CAKE
-                || clickedItem == Material.CAKE_BLOCK
-                || clickedItem == Material.JUKEBOX
-                || clickedItem == Material.HOPPER
-                || clickedItem == Material.DROPPER
-				);
+            boolean isAccessBlock = (
+                            clickedItem == Material.ANVIL
+                            || clickedItem == Material.BED
+                            || clickedItem == Material.BOAT
+                            || clickedItem == Material.BREWING_STAND
+            || clickedItem == Material.BURNING_FURNACE
+                            || clickedItem == Material.CAULDRON
+                            || clickedItem == Material.CHEST
+                            || clickedItem == Material.DISPENSER
+                            || clickedItem == Material.ENDER_CHEST
+                            || clickedItem == Material.ENCHANTMENT_TABLE
+            || clickedItem == Material.FENCE_GATE
+                            || clickedItem == Material.FURNACE
+                            || clickedItem == Material.MINECART
+                            || clickedItem == Material.POWERED_MINECART
+                            || clickedItem == Material.STORAGE_MINECART
+                            || clickedItem == Material.TRAP_DOOR
+                            || clickedItem == Material.WOODEN_DOOR
+                            || clickedItem == Material.WORKBENCH
+                            || clickedItem == Material.WOOD_BUTTON
+                            || clickedItem == Material.STONE_BUTTON
+            || clickedItem == Material.TRAPPED_CHEST
+                            || clickedItem == Material.LEVER
+                            || clickedItem == Material.STONE_PLATE
+                            || clickedItem == Material.WOOD_PLATE
+            || clickedItem == Material.CAKE
+            || clickedItem == Material.CAKE_BLOCK
+            || clickedItem == Material.JUKEBOX
+            || clickedItem == Material.HOPPER
+            || clickedItem == Material.DROPPER
+                            );
 
-		if (isAccessBlock)
-		{
-			if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL))
-			{
+            if (isAccessBlock)
+            {
+                    if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.PHYSICAL))
+                    {
 
-				SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getClickedBlock().getLocation()), event.getClickedBlock().getWorld());
-				SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
+                            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getClickedBlock().getLocation()), event.getClickedBlock().getWorld());
+                            SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
 
-				Material clickedBlock = event.getClickedBlock().getType();
+                            Material clickedBlock = event.getClickedBlock().getType();
 
-    			for (ZonePermissionType p : ZonePermissionType.values())
-				{
-					if (subZone == null)
-					{
-                        if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-						{
-							if (p.getPermissions().canAccessAllBlocks())
-							{
-								return;
-							}
-							else
-							{
-								for (Material m : p.getPermissions().getAccessibleBlocks())
-								{
-									if (clickedBlock == m)
-									{
-										return;
-									}
-								}
-							}
-						}
-					}
-					else
-					{
-                        // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                        if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                        {
-                            return;
-                        }
+                    for (ZonePermissionType p : ZonePermissionType.values())
+                            {
+                                    if (subZone == null)
+                                    {
+                    if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                                            {
+                                                    if (p.getPermissions().canAccessAllBlocks())
+                                                    {
+                                                            return;
+                                                    }
+                                                    else
+                                                    {
+                                                            for (Material m : p.getPermissions().getAccessibleBlocks())
+                                                            {
+                                                                    if (clickedBlock == m)
+                                                                    {
+                                                                            return;
+                                                                    }
+                                                            }
+                                                    }
+                                            }
+                                    }
+                                    else
+                                    {
+                    // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+                    if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+                    {
+                        return;
+                    }
 
-						if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p) || subZone.hasPermission("*", p))
-						{
-							if (p.getPermissions().canAccessAllBlocks())
-							{
-								return;
-							}
-							else
-							{
-								for (Material m : p.getPermissions().getAccessibleBlocks())
-								{
+                                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p) || subZone.hasPermission("*", p))
+                                            {
+                                                    if (p.getPermissions().canAccessAllBlocks())
+                                                    {
+                                                            return;
+                                                    }
+                                                    else
+                                                    {
+                                                            for (Material m : p.getPermissions().getAccessibleBlocks())
+                                                            {
 
-									if (clickedBlock == m)
-									{
-										return;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+                                                                    if (clickedBlock == m)
+                                                                    {
+                                                                            return;
+                                                                    }
+                                                            }
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
 
-            event.setCancelled(true);
-		}
+        event.setCancelled(true);
+            }
 
 
-	}
+    }
 
-	@EventHandler
+    @EventHandler
     public void onPlayerInteractEntityEvent(PlayerInteractEntityEvent event)
-	{
+    {
         if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
             return;
 
-		SafeCityZone zone = context.getZone(context.toThinLocation(event.getRightClicked().getLocation()), event.getRightClicked().getWorld());
-		if (zone == null) { return; }
+        SafeCityZone zone = context.getZone(context.toThinLocation(event.getRightClicked().getLocation()), event.getRightClicked().getWorld());
+        if (zone == null) { return; }
 
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getRightClicked().getLocation()), event.getRightClicked().getWorld());
-		SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-		EntityType clickedEntity = event.getRightClicked().getType();
+        SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getRightClicked().getLocation()), event.getRightClicked().getWorld());
+        SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
+        EntityType clickedEntity = event.getRightClicked().getType();
 
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p) || zone.hasPermission("*", p))
+        for (ZonePermissionType p : ZonePermissionType.values())
+        {
+            if (subZone == null)
+            {
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canInteractAllEntities())
-					{
-						return;
-					}
-					else
-					{
-						for (EntityType e : p.getPermissions().getInteractableEntities())
-						{
-							if (e == clickedEntity)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-                // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+                {
+                    if (p.getPermissions().canInteractAllEntities())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        for (EntityType e : p.getPermissions().getInteractableEntities())
+                        {
+                            if (e == clickedEntity)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
                 {
                     return;
                 }
 
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p) || subZone.hasPermission("*", p))
-				{
-					if (p.getPermissions().canInteractAllEntities())
-					{
-						return;
-					}
-					else
-					{
-						for (EntityType e : p.getPermissions().getInteractableEntities())
-						{
-							if (e == clickedEntity)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
+                if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p) || subZone.hasPermission("*", p))
+                {
+                    if (p.getPermissions().canInteractAllEntities())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        for (EntityType e : p.getPermissions().getInteractableEntities())
+                        {
+                            if (e == clickedEntity)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         event.setCancelled(true);
-	}
+    }
 
-	@EventHandler(ignoreCancelled=true)
-	public void onPlayerDamage(EntityDamageByEntityEvent event)
-	{
+    @EventHandler(ignoreCancelled=true)
+    public void onPlayerDamage(EntityDamageByEntityEvent event)
+    {
         if (!context.isValidWorld(event.getDamager().getWorld().getName()))
             return;
 
         Player attacker = null;
-	    Entity damageSource = event.getDamager();
+        Entity damageSource = event.getDamager();
 
-	    if ((damageSource instanceof Player))
-	    {
-	    	attacker = (Player)damageSource;
-	    }
-	    else if ((damageSource instanceof Arrow))
-	    {
-	    	Arrow arrow = (Arrow)damageSource;
+        if ((damageSource instanceof Player))
+        {
+            attacker = (Player)damageSource;
+        }
+        else if ((damageSource instanceof Arrow))
+        {
+            Arrow arrow = (Arrow)damageSource;
 
-	    	if ((arrow.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)arrow.getShooter();
-	    	}
-	    }
-	    else if ((damageSource instanceof ThrownPotion))
-	    {
-	    	ThrownPotion potion = (ThrownPotion)damageSource;
+            if ((arrow.getShooter() instanceof Player))
+            {
+                    attacker = (Player)arrow.getShooter();
+            }
+        }
+        else if ((damageSource instanceof ThrownPotion))
+        {
+            ThrownPotion potion = (ThrownPotion)damageSource;
 
-	    	if ((potion.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)potion.getShooter();
-	    	}
-	    }
+            if ((potion.getShooter() instanceof Player))
+            {
+                    attacker = (Player)potion.getShooter();
+            }
+        }
         else if ((damageSource instanceof Egg))
         {
             Egg egg = (Egg)damageSource;
@@ -373,12 +371,18 @@ public final class PermissionListener implements Listener
             }
         }
 
-	    if (attacker == null || (!(attacker instanceof Player))) { return; }
+        if (attacker == null || (!(attacker instanceof Player)))
+        {
+            return;
+        }
 
         SafeCityZone zone = context.getZone(context.toThinLocation(damageSource.getLocation()), damageSource.getWorld());
-		if (zone == null) { return; }
+        if (zone == null)
+        {
+            return;
+        }
 
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(damageSource.getLocation()), damageSource.getWorld());
+        SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(damageSource.getLocation()), damageSource.getWorld());
 
         if (event.getEntityType() == null) { return; }
         EntityType damagedEntity = event.getEntityType();
@@ -390,556 +394,555 @@ public final class PermissionListener implements Listener
 
         SafeCityPlayer scPlayer = context.getPlayer(attacker);
 
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+        for (ZonePermissionType p : ZonePermissionType.values())
+        {
+            if (subZone == null)
+            {
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canKillAllEntities())
-					{
+                {
+                    if (p.getPermissions().canKillAllEntities())
+                    {
                         return;
-					}
-					else
-					{
-						for (EntityType e : p.getPermissions().getKillableEntities())
-						{
-							if (event.getEntity().getType() == e)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-			else
-			{
+                    }
+                    else
+                    {
+                        for (EntityType e : p.getPermissions().getKillableEntities())
+                        {
+                            if (event.getEntity().getType() == e)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
                 if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
                 {
                     return;
                 }
 
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canKillAllEntities())
-					{
-						return;
-					}
-					else
-					{
-						for (EntityType e : p.getPermissions().getKillableEntities())
-						{
-							if (event.getEntity().getType() == e)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
+                if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                {
+                    if (p.getPermissions().canKillAllEntities())
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        for (EntityType e : p.getPermissions().getKillableEntities())
+                        {
+                            if (event.getEntity().getType() == e)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         event.setCancelled(true);
-	}
+    }
 
-	@EventHandler(ignoreCancelled=true)
-	public void onVehicleDamage(VehicleDamageEvent event)
-	{
-        if (event.getAttacker() == null)
-            return;
+    @EventHandler(ignoreCancelled=true)
+    public void onVehicleDamage(VehicleDamageEvent event)
+    {
+    if (event.getAttacker() == null)
+        return;
 
-        if (!context.isValidWorld(event.getAttacker().getWorld().getName()))
-            return;
+    if (!context.isValidWorld(event.getAttacker().getWorld().getName()))
+        return;
 
-		Player attacker = null;
-	    Entity damageSource = event.getAttacker();
+            Player attacker = null;
+        Entity damageSource = event.getAttacker();
 
-	    if ((damageSource instanceof Player))
-	    {
-	    	attacker = (Player)damageSource;
-	    }
-	    else if ((damageSource instanceof Arrow))
-	    {
-	    	Arrow arrow = (Arrow)damageSource;
-
-	    	if ((arrow.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)arrow.getShooter();
-	    	}
-	    }
-	    else if ((damageSource instanceof ThrownPotion))
-	    {
-	    	ThrownPotion potion = (ThrownPotion)damageSource;
-
-	    	if ((potion.getShooter() instanceof Player))
-	    	{
-	    		attacker = (Player)potion.getShooter();
-	    	}
-
-	    }
-
-	    if (attacker == null)
+        if ((damageSource instanceof Player))
         {
-            return;
+            attacker = (Player)damageSource;
+        }
+        else if ((damageSource instanceof Arrow))
+        {
+            Arrow arrow = (Arrow)damageSource;
+
+            if ((arrow.getShooter() instanceof Player))
+            {
+                    attacker = (Player)arrow.getShooter();
+            }
+        }
+        else if ((damageSource instanceof ThrownPotion))
+        {
+            ThrownPotion potion = (ThrownPotion)damageSource;
+
+            if ((potion.getShooter() instanceof Player))
+            {
+                    attacker = (Player)potion.getShooter();
+            }
+
         }
 
-	    if (!(attacker instanceof Player))
-        {
-            return;
-        }
+        if (attacker == null)
+    {
+        return;
+    }
 
-		SafeCityZone zone = context.getZone(context.toThinLocation(event.getVehicle().getLocation()), event.getVehicle().getWorld());
+        if (!(attacker instanceof Player))
+    {
+        return;
+    }
 
-		if (zone == null)
-        {
-            return;
-        }
+            SafeCityZone zone = context.getZone(context.toThinLocation(event.getVehicle().getLocation()), event.getVehicle().getWorld());
 
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getVehicle().getLocation()), event.getVehicle().getWorld());
-		SafeCityPlayer scPlayer = context.getPlayer(attacker);
+            if (zone == null)
+    {
+        return;
+    }
 
-		boolean canDamageVehicles = false;
+            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getVehicle().getLocation()), event.getVehicle().getWorld());
+            SafeCityPlayer scPlayer = context.getPlayer(attacker);
 
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canDamageVehicles())
+            boolean canDamageVehicles = false;
+
+            for (ZonePermissionType p : ZonePermissionType.values())
+            {
+                    if (subZone == null)
                     {
-                        canDamageVehicles = true;
+                            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canDamageVehicles())
+                {
+                    canDamageVehicles = true;
+                }
+                            }
                     }
-				}
-			}
-			else
-			{
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canDamageVehicles())
+                    else
                     {
-                        canDamageVehicles = true;
+                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canDamageVehicles())
+                {
+                    canDamageVehicles = true;
+                }
+                            }
                     }
-				}
-			}
-		}
+            }
 
-		if (!canDamageVehicles)
+            if (!canDamageVehicles)
+    {
+        event.setCancelled(true);
+    }
+    }
+
+    @EventHandler(ignoreCancelled=true)
+    public void onBlockBreak(BlockBreakEvent event)
+    {
+            if (event.getBlock() == null || event.getBlock().getType() == Material.AIR)
+    {
+        return;
+    }
+
+    if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+        return;
+
+            SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
+            if (zone == null) { return; }
+
+            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
+            SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
+
+            for (ZonePermissionType p : ZonePermissionType.values())
+            {
+                    if (subZone == null)
+                    {
+                            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canBreakAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getBreakableBlocks())
+                                            {
+                                                    if (event.getBlock().getType() == m)
+                                                    {
+                                                            return;
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
+                    else
+                    {
+            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            {
+                return;
+            }
+
+                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canBreakAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getBreakableBlocks())
+                                            {
+                                                    if (event.getBlock().getType() == m)
+                                                    {
+                                                            return;
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
+            }
+
+             event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled=true)
+    public void onBlockPlace(BlockPlaceEvent event)
+    {
+    if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+        return;
+
+            SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
+            if (zone == null) { return; }
+
+    SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
+            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
+
+            for (ZonePermissionType p : ZonePermissionType.values())
+            {
+                    if (subZone == null)
+                    {
+                            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canPlaceAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getPlaceableBlocks())
+                                            {
+                                                    if (event.getBlock().getType() == m)
+                                                    {
+                                                            return;
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
+                    else
+                    {
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner)) { return; }
+            // if (subZone.isBuyer(scPlayer.getBukkitPlayer().getName())) { return; }
+
+                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canPlaceAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getPlaceableBlocks())
+                                            {
+                                                    if (event.getBlock().getType() == m)
+                                                    {
+                                                            return;
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
+            }
+
+    event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled=true)
+    public void onBucketEmpty(PlayerBucketEmptyEvent event)
+    {
+    if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+        return;
+
+            if (event.getBlockClicked() == null || event.getBlockClicked().getType() == Material.AIR) { return; }
+
+            Location waterLocation = event.getBlockClicked().getLocation();
+            waterLocation.setX(waterLocation.getBlockX() + event.getBlockFace().getModX());
+            waterLocation.setY(waterLocation.getBlockY() + event.getBlockFace().getModY());
+            waterLocation.setZ(waterLocation.getBlockZ() + event.getBlockFace().getModZ());
+
+            SafeCityZone zone = context.getZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
+            if (zone == null) { return; }
+
+            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
+            SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
+
+            for (ZonePermissionType p : ZonePermissionType.values())
+            {
+                    if (subZone == null)
+                    {
+                            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canPlaceLiquid())
+                {
+                    return;
+                }
+                            }
+                    }
+                    else
+                    {
+            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            {
+                return;
+            }
+
+                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canPlaceLiquid())
+                {
+                    return;
+                }
+                            }
+                    }
+            }
+
+             event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled=true)
+    public void onPlayerBucketFill(PlayerBucketFillEvent event)
+    {
+    if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+        return;
+
+            if (event.getBlockClicked() == null || event.getBlockClicked().getType() == Material.AIR) { return; }
+
+            Location waterLocation = event.getBlockClicked().getLocation();
+
+    SafeCityZone zone = context.getZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
+            if (zone == null) { return; }
+
+            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
+            SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
+
+            for (ZonePermissionType p : ZonePermissionType.values())
+            {
+                    if (subZone == null)
+                    {
+                            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canRetrieveLiquid())
+                {
+                    return;
+                }
+                            }
+                    }
+                    else
+                    {
+            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            {
+                return;
+            }
+
+                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canRetrieveLiquid())
+                {
+                    return;
+                }
+                            }
+                    }
+            }
+
+    event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled=true)
+    public void onHanging(HangingPlaceEvent event)
+    {
+    if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
+        return;
+
+            if (event.getBlock() == null || event.getBlock().getType() == Material.AIR) { return; }
+
+            SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
+            if (zone == null) { return; }
+
+            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
+            SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
+
+            for (ZonePermissionType p : ZonePermissionType.values())
+            {
+                    if (subZone == null)
+                    {
+                            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canPlaceAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getPlaceableBlocks())
+                                            {
+                                                    if (event.getBlock().getType() == m)
+                                                    {
+                                                            return;
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
+                    else
+                    {
+            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            {
+                return;
+            }
+
+                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canPlaceAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getPlaceableBlocks())
+                                            {
+                                                    if (event.getBlock().getType() == m)
+                                                    {
+                                                            return;
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
+            }
+
+            event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled=true)
+    public void onHangingBreak(HangingBreakEvent event)
+    {
+    if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+        return;
+
+            if (!(event instanceof HangingBreakByEntityEvent))
+        {
+                    event.setCancelled(true);
+                    return;
+        }
+
+            HangingBreakByEntityEvent entityEvent = (HangingBreakByEntityEvent)event;
+        Entity remover = entityEvent.getRemover();
+
+        if (!(remover instanceof Player))
         {
             event.setCancelled(true);
-        }
-	}
-
-	@EventHandler(ignoreCancelled=true)
-	public void onBlockBreak(BlockBreakEvent event)
-	{
-		if (event.getBlock() == null || event.getBlock().getType() == Material.AIR)
-        {
             return;
         }
 
-        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
-            return;
+        SafeCityZone zone = context.getZone(context.toThinLocation(event.getEntity().getLocation()), event.getEntity().getWorld());
+            if (zone == null) { return; }
 
-		SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
-		if (zone == null) { return; }
+            Player player = (Player)entityEvent.getRemover();
+            SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getEntity().getLocation()), event.getEntity().getWorld());
+            SafeCityPlayer scPlayer = context.getPlayer(player);
 
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
-		SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canBreakAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getBreakableBlocks())
-						{
-							if (event.getBlock().getType() == m)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-                // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                {
-                    return;
-                }
-
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canBreakAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getBreakableBlocks())
-						{
-							if (event.getBlock().getType() == m)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		 event.setCancelled(true);
-	}
-
-	@EventHandler(ignoreCancelled=true)
-	public void onBlockPlace(BlockPlaceEvent event)
-	{
-        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
-            return;
-
-		SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
-		if (zone == null) { return; }
-
-        SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
-
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canPlaceAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getPlaceableBlocks())
-						{
-							if (event.getBlock().getType() == m)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner)) { return; }
-                // if (subZone.isBuyer(scPlayer.getBukkitPlayer().getName())) { return; }
-
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canPlaceAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getPlaceableBlocks())
-						{
-							if (event.getBlock().getType() == m)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-
-        event.setCancelled(true);
-	}
-
-	@EventHandler(ignoreCancelled=true)
-	public void onBucketEmpty(PlayerBucketEmptyEvent event)
-	{
-        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
-            return;
-
-		if (event.getBlockClicked() == null || event.getBlockClicked().getType() == Material.AIR) { return; }
-
-		Location waterLocation = event.getBlockClicked().getLocation();
-		waterLocation.setX(waterLocation.getBlockX() + event.getBlockFace().getModX());
-		waterLocation.setY(waterLocation.getBlockY() + event.getBlockFace().getModY());
-		waterLocation.setZ(waterLocation.getBlockZ() + event.getBlockFace().getModZ());
-
-		SafeCityZone zone = context.getZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
-		if (zone == null) { return; }
-
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
-		SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canPlaceLiquid())
+            for (ZonePermissionType p : ZonePermissionType.values())
+            {
+                    if (subZone == null)
                     {
-                        return;
-                    }
-				}
-			}
-			else
-			{
-                // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                {
-                    return;
-                }
+                            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canBreakAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getBreakableBlocks())
+                                            {
+                                                    if (entityEvent.getEntity() instanceof ItemFrame)
+                                                    {
+                                                            if (m == Material.ITEM_FRAME)
+                            {
+                                return;
+                            }
+                                                    }
 
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canPlaceLiquid())
+                                                    if (entityEvent.getEntity() instanceof Painting)
+                                                    {
+                                                            if (m == Material.ITEM_FRAME)
+                            {
+                                return;
+                            }
+                                                    }
+                                            }
+                                    }
+                            }
+                    }
+                    else
                     {
-                        return;
+            // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
+            {
+                return;
+            }
+
+                            if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
+                            {
+                                    if (p.getPermissions().canBreakAllBlocks())
+                                    {
+                                            return;
+                                    }
+                                    else
+                                    {
+                                            for (Material m : p.getPermissions().getBreakableBlocks())
+                                            {
+                                                    if (entityEvent.getEntity() instanceof ItemFrame)
+                                                    {
+                                                            if (m == Material.ITEM_FRAME)
+                            {
+                                return;
+                            }
+                                                    }
+
+                                                    if (entityEvent.getEntity() instanceof Painting)
+                                                    {
+                                                            if (m == Material.ITEM_FRAME)
+                            {
+                                return;
+                            }
+                                                    }
+                                            }
+                                    }
+                            }
                     }
-				}
-			}
-		}
+            }
 
-		 event.setCancelled(true);
-	}
-
-	@EventHandler(ignoreCancelled=true)
-	public void onPlayerBucketFill(PlayerBucketFillEvent event)
-	{
-        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
-            return;
-
-		if (event.getBlockClicked() == null || event.getBlockClicked().getType() == Material.AIR) { return; }
-
-		Location waterLocation = event.getBlockClicked().getLocation();
-
-        SafeCityZone zone = context.getZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
-		if (zone == null) { return; }
-
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(waterLocation), waterLocation.getWorld());
-		SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canRetrieveLiquid())
-                    {
-                        return;
-                    }
-				}
-			}
-			else
-			{
-                // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                {
-                    return;
-                }
-
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canRetrieveLiquid())
-                    {
-                        return;
-                    }
-				}
-			}
-		}
-
-        event.setCancelled(true);
-	}
-
-	@EventHandler(ignoreCancelled=true)
-	public void onHanging(HangingPlaceEvent event)
-	{
-        if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
-            return;
-
-		if (event.getBlock() == null || event.getBlock().getType() == Material.AIR) { return; }
-
-		SafeCityZone zone = context.getZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
-		if (zone == null) { return; }
-
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getBlock().getLocation()), event.getBlock().getWorld());
-		SafeCityPlayer scPlayer = context.getPlayer(event.getPlayer());
-
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canPlaceAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getPlaceableBlocks())
-						{
-							if (event.getBlock().getType() == m)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-                // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                {
-                    return;
-                }
-
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canPlaceAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getPlaceableBlocks())
-						{
-							if (event.getBlock().getType() == m)
-							{
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		event.setCancelled(true);
-	}
-
-	@EventHandler(ignoreCancelled=true)
-	public void onHangingBreak(HangingBreakEvent event)
-	{
-        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
-            return;
-
-		if (!(event instanceof HangingBreakByEntityEvent))
-	    {
-			event.setCancelled(true);
-			return;
-	    }
-
-		HangingBreakByEntityEvent entityEvent = (HangingBreakByEntityEvent)event;
-	    Entity remover = entityEvent.getRemover();
-
-	    if (!(remover instanceof Player))
-	    {
-	    	event.setCancelled(true);
-	    	return;
-	    }
-
-	    SafeCityZone zone = context.getZone(context.toThinLocation(event.getEntity().getLocation()), event.getEntity().getWorld());
-		if (zone == null) { return; }
-
-		Player player = (Player)entityEvent.getRemover();
-		SafeCitySubZone subZone = context.getSubZone(context.toThinLocation(event.getEntity().getLocation()), event.getEntity().getWorld());
-		SafeCityPlayer scPlayer = context.getPlayer(player);
-
-		for (ZonePermissionType p : ZonePermissionType.values())
-		{
-			if (subZone == null)
-			{
-				// if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canBreakAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getBreakableBlocks())
-						{
-							if (entityEvent.getEntity() instanceof ItemFrame)
-							{
-								if (m == Material.ITEM_FRAME)
-                                {
-                                    return;
-                                }
-							}
-
-							if (entityEvent.getEntity() instanceof Painting)
-							{
-								if (m == Material.ITEM_FRAME)
-                                {
-                                    return;
-                                }
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-                // if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                if (zone.hasPermission(scPlayer.getBukkitPlayer().getName(), ZonePermissionType.Owner))
-                {
-                    return;
-                }
-
-				if (subZone.hasPermission(scPlayer.getBukkitPlayer().getName(), p))
-				{
-					if (p.getPermissions().canBreakAllBlocks())
-					{
-						return;
-					}
-					else
-					{
-						for (Material m : p.getPermissions().getBreakableBlocks())
-						{
-							if (entityEvent.getEntity() instanceof ItemFrame)
-							{
-								if (m == Material.ITEM_FRAME)
-                                {
-                                    return;
-                                }
-							}
-
-							if (entityEvent.getEntity() instanceof Painting)
-							{
-								if (m == Material.ITEM_FRAME)
-                                {
-                                    return;
-                                }
-							}
-						}
-					}
-				}
-			}
-		}
-
-		event.setCancelled(true);
-	}
+            event.setCancelled(true);
+    }
 
     @EventHandler(ignoreCancelled=true)
     public void onPlayerPortal(PlayerPortalEvent event)
