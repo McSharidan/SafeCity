@@ -36,14 +36,14 @@ public final class ZoneCommands implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (sender instanceof Player)
+        /* if (sender instanceof Player)
         {
             if (!context.isValidWorld(((Player)sender).getWorld().getName()))
             {
                 sender.sendMessage(ChatColor.RED + "SafeCity is not enabled in this world.");
                 return true;
             }
-        }
+        } */
 
         if (!(sender instanceof Player))
         {
@@ -439,7 +439,6 @@ public final class ZoneCommands implements CommandExecutor
     {
         SafeCityPlayer scPlayer = context.getPlayer((Player) sender);
         ThinLocation playerLocation = new ThinLocation(scPlayer.getBukkitPlayer().getLocation().getBlockX(), scPlayer.getBukkitPlayer().getLocation().getBlockY(), scPlayer.getBukkitPlayer().getLocation().getBlockZ());
-
 
         SafeCityZone zone = context.getZone(playerLocation, scPlayer.getBukkitPlayer().getWorld());
 
@@ -2067,7 +2066,7 @@ public final class ZoneCommands implements CommandExecutor
             scPlayer.getBukkitPlayer().sendMessage("Critical error withdrawing money.");
             return;
         }
-        
+
         SafeCitySubZone subZone = context.getSubZone(scPlayer.getLocation(), scPlayer.getBukkitPlayer().getWorld());
 
         if (subZone == null)
@@ -2272,6 +2271,12 @@ public final class ZoneCommands implements CommandExecutor
     private void createNewZone(CommandSender sender, Command cmd, String label, String[] args)
     {
         SafeCityPlayer scPlayer = context.getPlayer((Player) sender);
+
+        if (!context.isValidWorld(((Player)sender).getWorld().getName()))
+        {
+            sender.sendMessage(ChatColor.RED + "SafeCity is not enabled in this world.");
+            return;
+        }
 
         if (!scPlayer.getBukkitPlayer().hasPermission(PluginPermission.Create_City.permissionNode()))
         {
