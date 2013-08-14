@@ -49,7 +49,17 @@ public final class ZoneNotifyListener implements Listener
         {
             if (scPlayer.getZoneManager().getCurrentZone() != null)
             {
-                scPlayer.getBukkitPlayer().sendMessage(ChatColor.GOLD + " ~ " + ChatColor.GREEN + "Wilderness");
+                StringBuilder statusString = new StringBuilder()
+                        .append(ChatColor.GOLD).append(" ~ ");
+
+                if (this.context.getPluginSettings().pvpInWilderness())
+                    statusString.append(ChatColor.RED).append("[PvP] ");
+
+                statusString.append( ChatColor.GREEN).append("Wilderness");
+
+                scPlayer.getBukkitPlayer().sendMessage(statusString.toString());
+
+                // scPlayer.getBukkitPlayer().sendMessage(ChatColor.GOLD + " ~ " + ChatColor.GREEN + "Wilderness");
                 scPlayer.getZoneManager().setCurrentZone(null);
 
                 return;
@@ -63,7 +73,17 @@ public final class ZoneNotifyListener implements Listener
         {
            if (scPlayer.getZoneManager().getCurrentZone() != null)
             {
-                scPlayer.getBukkitPlayer().sendMessage(ChatColor.GOLD + " ~ " + ChatColor.GREEN + "Wilderness");
+                StringBuilder statusString = new StringBuilder()
+                        .append(ChatColor.GOLD).append(" ~ ");
+
+                if (this.context.getPluginSettings().pvpInWilderness())
+                    statusString.append(ChatColor.RED).append("[PvP] ");
+
+                statusString.append( ChatColor.GREEN).append("Wilderness");
+
+                scPlayer.getBukkitPlayer().sendMessage(statusString.toString());
+
+                // scPlayer.getBukkitPlayer().sendMessage(ChatColor.GOLD + " ~ " + ChatColor.GREEN + "Wilderness");
                 scPlayer.getZoneManager().setCurrentZone(null);
 
                 return;
