@@ -71,7 +71,7 @@ public class ZoneVisualizer implements Runnable
                 ThinLocation chunkLesserCorner = new ThinLocation(minX, 45, minZ);
                 ThinLocation chunkGreaterCorner = new ThinLocation(maxX, 45, maxZ);
 
-                SafeCityZoneCollection zoneColl = visualManager.getContext().getZonesInChunk(x, z);
+                SafeCityZoneCollection zoneColl = visualManager.getContext().getZonesInChunk(visualManager.getSafeCityPlayer().getBukkitPlayer().getWorld(), x, z);
                 if (zoneColl != null)
                 {
                     for (int i = 0; i < zoneColl.getAllZones().length; i++)
@@ -97,7 +97,7 @@ public class ZoneVisualizer implements Runnable
                     }
                 }
 
-                SafeCitySubZoneCollection subZoneColl = visualManager.getContext().getSubZonesInChunk(x, z);
+                SafeCitySubZoneCollection subZoneColl = visualManager.getContext().getSubZonesInChunk(visualManager.getSafeCityPlayer().getBukkitPlayer().getWorld(), x, z);
                 if (subZoneColl != null)
                 {
                     for (int i = 0; i < subZoneColl.getAllSubZones().length; i++)

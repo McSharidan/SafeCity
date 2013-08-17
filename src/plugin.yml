@@ -1,8 +1,8 @@
 name: SafeCity
 main: me.jayfella.SafeCity.SafeCityPlugin
-version: 1.0.6
+version: 1.0.7
 author: jayfella
-depend: [ Vault, c3p0Extension ]
+depend: [ Vault ]
 
 commands:
     zone:

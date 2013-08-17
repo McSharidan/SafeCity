@@ -63,7 +63,7 @@ public final class AntiGriefListener implements Listener
                 int chunkX = block.getLocation().getBlockX() >> 4;
                 int chunkZ = block.getLocation().getBlockZ() >> 4;
 
-                SafeCityZoneCollection zoneCollection = context.getZonesInChunk(chunkX, chunkZ);
+                SafeCityZoneCollection zoneCollection = context.getZonesInChunk(block.getWorld(), chunkX, chunkZ);
 
                 for (SafeCityZone zone : zoneCollection.getAllZones())
                 {

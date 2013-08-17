@@ -143,19 +143,19 @@ public abstract class GenericZone
 
     public String getFounder() { return owner; }
     public boolean isFounder(String playerName) {	return owner.equals(playerName); }
-   
+
     public void setOwner(String playerName)
 	{
 		owner = playerName;
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -164,15 +164,15 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("owner = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setString(1, getFounder());
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
-                } 
+                }
                 catch (SQLException ex)
                 {
                     Logger.getLogger(GenericZone.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,7 +193,7 @@ public abstract class GenericZone
             }
         });
 	}
-    
+
     public String getName() { return zoneName; }
     public void setName(String name)
 	{
@@ -207,15 +207,15 @@ public abstract class GenericZone
         		.append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -224,13 +224,13 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("zoneName = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setString(1, getName());
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -252,7 +252,7 @@ public abstract class GenericZone
                 }
             }
         });
-        
+
 	}
 
     public World getWorld() { return this.world; }
@@ -285,15 +285,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
         context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -305,16 +305,16 @@ public abstract class GenericZone
                             .append("greaterCornerX = ?, ")
                             .append("greaterCornerZ = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setInt(1, getLesserCorner().getBlockX());
                     ps.setInt(2, getLesserCorner().getBlockZ());
                     ps.setInt(3, getGreaterCorner().getBlockX());
                     ps.setInt(4, getGreaterCorner().getBlockZ());
                     ps.setInt(5, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -336,7 +336,7 @@ public abstract class GenericZone
                 }
             }
         });
-        
+
     }
 
     public int getLength() { return (greaterCorner.getBlockX() - lesserCorner.getBlockX()) + 1;	}
@@ -358,15 +358,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -375,13 +375,13 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("allowMobSpawning = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setInt(1, booleanToBinary(allowsMobSpawning()));
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -403,7 +403,7 @@ public abstract class GenericZone
                 }
             }
         });
-        
+
 	}
 
     public boolean isForSale() { return isForSale; }
@@ -445,15 +445,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -467,10 +467,10 @@ public abstract class GenericZone
                             .append("rentTimeEnds = ?, ")
                             .append("renter = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setInt(1, booleanToBinary(isForRent()));
                     ps.setInt(2, booleanToBinary(isRented()));
                     ps.setInt(3, getSalePrice());
@@ -478,7 +478,7 @@ public abstract class GenericZone
                     ps.setLong(5, getRentTimeEnds());
                     ps.setString(6, getRenter());
                     ps.setInt(7, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -500,7 +500,7 @@ public abstract class GenericZone
                 }
             }
         });
-        
+
 	}
 
     public String getEntryMessage() { return this.enterMessage; }
@@ -516,15 +516,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -533,13 +533,13 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("enterMessage = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setString(1, getEntryMessage());
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -576,15 +576,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -593,13 +593,13 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("exitMessage = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setString(1, getExitMessage());
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -636,15 +636,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -653,13 +653,13 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("allowPvp = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setInt(1, booleanToBinary(isPvpEnabled()));
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -696,15 +696,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -713,13 +713,13 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("allowFly = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setInt(1, booleanToBinary(isFlyAllowed()));
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -770,15 +770,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -789,15 +789,15 @@ public abstract class GenericZone
                             .append("infoSignLocY = ?, ")
                             .append("infoSignLocZ = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setInt(1, getInfoSignLocation().getBlockX());
                     ps.setInt(2, getInfoSignLocation().getBlockY());
                     ps.setInt(3, getInfoSignLocation().getBlockZ());
                     ps.setInt(4, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -834,15 +834,15 @@ public abstract class GenericZone
                 .append("WHERE id = '").append(this.getId()).append("'");
 
 		context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(),	new MySql_SetValues(context, statement.toString()));*/
-        
-        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable() 
+
+        context.getPlugin().getServer().getScheduler().runTaskAsynchronously(context.getPlugin(), new Runnable()
         {
             @Override
             public void run()
             {
                 Connection connection = null;
                 PreparedStatement ps = null;
-                
+
                 try
                 {
                     StringBuilder statement = new StringBuilder()
@@ -851,13 +851,13 @@ public abstract class GenericZone
                             .append(" SET ")
                             .append("vineGrowth = ? ")
                             .append("WHERE id = ?");
-                    
+
                     connection = context.getMySql().getConnection();
                     ps = connection.prepareStatement(statement.toString());
-                    
+
                     ps.setInt(1, booleanToBinary(getVineGrowth()));
                     ps.setInt(2, getId());
-                    
+
                     ps.executeUpdate();
                 }
                 catch (SQLException ex)
@@ -1059,11 +1059,11 @@ public abstract class GenericZone
                 {
                     // NOTE: primary zones dont have buyers, only owners.
                     // if you buy a primary zone, you become the owner.
-                    
+
                     // subzone buy permissions are handled with setSaleDetails()
-                    
+
                     // buy permissions are instead handled elsewhere
-                    
+
                     // hence, this is ignored.
                 }
 				case Farmer:
@@ -1187,7 +1187,7 @@ public abstract class GenericZone
 
 		switch (perm)
 		{
-			
+
             case Access:
 			{
 				if (this.perm_access.containsIgnoreCase(playerName)) { return true; }
@@ -1223,7 +1223,7 @@ public abstract class GenericZone
 
 				break;
 			}
-                
+
             case Buyer:
             {
                 if (this instanceof SafeCitySubZone)
@@ -1234,7 +1234,7 @@ public abstract class GenericZone
                         return true;
                     }
                 }
-                
+
                 break;
             }
 

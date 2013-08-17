@@ -36,15 +36,6 @@ public final class ZoneCommands implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        /* if (sender instanceof Player)
-        {
-            if (!context.isValidWorld(((Player)sender).getWorld().getName()))
-            {
-                sender.sendMessage(ChatColor.RED + "SafeCity is not enabled in this world.");
-                return true;
-            }
-        } */
-
         if (!(sender instanceof Player))
         {
             sender.sendMessage(context.getMessageHandler().Ingame_Only());
@@ -2285,7 +2276,8 @@ public final class ZoneCommands implements CommandExecutor
         }
 
         // check if zone already exists
-        if (context.getZone(context.toThinLocation(scPlayer.getBukkitPlayer().getLocation()), scPlayer.getBukkitPlayer().getWorld()) != null)
+        SafeCityZone foundZone = context.getZone(context.toThinLocation(scPlayer.getBukkitPlayer().getLocation()), scPlayer.getBukkitPlayer().getWorld());
+        if (foundZone != null)
         {
             scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Already_Exists());
             return;
@@ -2348,8 +2340,11 @@ public final class ZoneCommands implements CommandExecutor
             // check zone overlap
             if (context.isOverlap(lesserCorner, greaterCorner, zone.getLesserCorner(), zone.getGreaterCorner()))
             {
-                scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Overlap());
-                return;
+                if (scPlayer.getBukkitPlayer().getWorld().getName().equals(zone.getWorld().getName()))
+                {
+                    scPlayer.getBukkitPlayer().sendMessage(context.getMessageHandler().Zone_Overlap());
+                    return;
+                }
             }
 
             // check if max-zones-per-player exceeded

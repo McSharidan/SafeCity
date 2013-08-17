@@ -16,31 +16,16 @@ public class ZoneVisualRemover implements Runnable
 
     public void removeVisuals(boolean runAsync)
     {
-        // if (this.isBusy) { return; }
-
-        /*if (runAsync)
-        {
-            visualManager.getContext().getPlugin().getServer().getScheduler().runTaskAsynchronously(visualManager.getContext().getPlugin(), this);
-        }
-        else
-        {
-            run();
-        }*/
-
         run();
     }
 
     @Override
     public void run()
     {
-        // isBusy = true;
-
         for (ChunkBlockPair cbp : visualManager.getActiveVisuals())
         {
             cbp.revertAllBlockChanges();
         }
-
-        // isBusy = false;
     }
 
 }

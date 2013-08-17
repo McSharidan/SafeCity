@@ -83,7 +83,7 @@ public final class VisualManager
 		(block.getType() == Material.LEAVES) ||
 		(block.getType() == Material.RED_ROSE) ||
 		(block.getType() == Material.YELLOW_FLOWER);*/
-        
+
         return !block.getType().isSolid();
     }
 

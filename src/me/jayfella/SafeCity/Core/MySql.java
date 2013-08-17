@@ -25,11 +25,11 @@ import org.bukkit.entity.Player;
 public final class MySql implements Closeable
 {
 	private final SafeCityContext context;
-	
+
     /*private final String url;
 	private final String username;
 	private final String password;*/
-    
+
     private final C3p0ExtensionPlugin c3p0;
     private final DatabaseConnection databaseConnection;
 
@@ -40,9 +40,9 @@ public final class MySql implements Closeable
 	public MySql(SafeCityContext context)
 	{
 		this.context = context;
-        
+
         this.c3p0 = (C3p0ExtensionPlugin)context.getPlugin().getServer().getPluginManager().getPlugin("c3p0Extension");
-        
+
         this.databaseConnection = new DatabaseConnection(
                 DatabaseType.valueOf(this.context.getPluginSettings().databaseDetails().databaseType()),
                 this.context.getPluginSettings().databaseDetails().url(),
@@ -54,19 +54,19 @@ public final class MySql implements Closeable
         if (this.c3p0 == null)
         {
             context.getLogger().log(Level.SEVERE, "Required Dependency c3p0Extension not found! Disabling plugin!");
-            
+
             Bukkit.getPluginManager().disablePlugin(this.context.getPlugin());
             return;
         }
-        
+
         if (!c3p0.createDataSource(databaseConnection))
         {
             context.getLogger().log(Level.SEVERE, "Unable to establish database connection! Disabling plugin!");
-            
+
             Bukkit.getPluginManager().disablePlugin(this.context.getPlugin());
             return;
         }
-        
+
 		createTables();
 	}
 
@@ -186,11 +186,11 @@ public final class MySql implements Closeable
                     .append("CREATE TABLE IF NOT EXISTS players (")
                     .append("id INT PRIMARY KEY AUTO_INCREMENT,")
                     .append("playerName VARCHAR(20),")
-                    
+
                     .append("registered BIGINT,")
                     .append("lastlogin BIGINT,")
                     .append("lastlogout BIGINT")
-                    
+
                     .append(")")
                     .toString());
 
@@ -302,27 +302,27 @@ public final class MySql implements Closeable
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        
+
         try
         {
             connection = context.getMySql().getConnection();
 
             preparedStatement = connection.prepareStatement("SELECT * FROM players where playerName = ?");
             preparedStatement.setString(1, playerName);
-            
+
             resultSet = preparedStatement.executeQuery();
-            
+
             while (resultSet.next())
             {
                 long regTime = resultSet.getLong(3);
                 long lastLogin = resultSet.getLong(4);
                 long lastLogout = resultSet.getLong(5);
-                
+
                 Player player = context.getPlugin().getServer().getPlayer(playerName);
-                
+
                 return new SafeCityPlayer(context, player, regTime, lastLogin, lastLogout);
             }
-            
+
             return null;
         }
         catch (SQLException ex)
@@ -362,29 +362,29 @@ public final class MySql implements Closeable
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        
+
         try
         {
             connection = context.getMySql().getConnection();
 
             preparedStatement = connection.prepareStatement("SELECT * FROM players where playerName = ?");
             preparedStatement.setString(1, playerName);
-            
+
             resultSet = preparedStatement.executeQuery();
-            
+
             while (resultSet.next())
             {
                 long regTime = resultSet.getLong(3);
                 long lastLogin = resultSet.getLong(4);
                 long lastLogout = resultSet.getLong(5);
-                
+
                 // Player player = context.getPlugin().getServer().getPlayer(playerName);
                 // OfflinePlayer offlinePlayer = context.getPlugin().getServer().getOfflinePlayer(playerName);
-                
+
                 // return new SafeCityPlayer(context, null, offlinePlayer, regTime, lastLogin, lastLogout);
                 return new SafeCityOfflinePlayer(context, playerName, regTime, lastLogin, lastLogout);
             }
-            
+
             return null;
         }
         catch (SQLException ex)
@@ -418,27 +418,27 @@ public final class MySql implements Closeable
             }
         }
     }
-    
+
     public boolean playerExists(String playerName)
     {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        
+
         try
         {
             connection = context.getMySql().getConnection();
 
             preparedStatement = connection.prepareStatement("SELECT * FROM players where playerName = ?");
             preparedStatement.setString(1, playerName);
-            
+
             resultSet = preparedStatement.executeQuery();
-            
+
             while (resultSet.next())
             {
                 return true;
             }
-            
+
             return false;
         }
         catch (SQLException ex)
@@ -472,7 +472,7 @@ public final class MySql implements Closeable
             }
         }
     }
-    
+
     public void loadZones()
     {
             Connection connection = null;
@@ -700,7 +700,7 @@ public final class MySql implements Closeable
                 context.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                 return;
             }
-        }   
+        }
 
             context.getConsole().sendMessage("[SafeCity] " + ChatColor.GOLD + "Retrieved " + ChatColor.RED +  subZoneCount + ChatColor.GOLD + " sub-zones.");
     }
@@ -940,7 +940,7 @@ public final class MySql implements Closeable
     @Override
     public void close()
     {
-       
+
     }
 
 }

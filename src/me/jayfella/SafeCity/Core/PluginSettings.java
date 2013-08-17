@@ -14,6 +14,7 @@ public final class PluginSettings
     // zone-related
     private final int minZoneDistance;
     private final int maxPlayerZones;
+    private final boolean pvpInWilderness;
     private final String[] allowedWorlds;
 
     // --INDEV
@@ -44,21 +45,24 @@ public final class PluginSettings
 
         this.minZoneDistance = fileConfig.getInt("general.min-zone-distance");
         this.maxPlayerZones = fileConfig.getInt("general.max-zones-per-player");
+        this.pvpInWilderness = fileConfig.getBoolean("general.wilderness-pvp");
 
         List<?> worlds = fileConfig.getList("allowed-worlds");
         this.allowedWorlds = worlds.toArray(new String[worlds.size()]);
-        
+
         this.publicZoneCost = fileConfig.getDouble("prices.public-zone");
         this.publicSpawnCost = fileConfig.getDouble("prices.public-spawn");
-        this.pvpZoneCost = fileConfig.getDouble("prices.pvp-zone");        
+        this.pvpZoneCost = fileConfig.getDouble("prices.pvp-zone");
     }
 
     public int getNewZoneId() { zoneIdIncrement++; return zoneIdIncrement; }
     public void setZoneIncrement(int value) { this.zoneIdIncrement = value; }
     public int getMinZoneDistance() { return minZoneDistance; }
     public int getMaxZonesPerPlayer() { return this.maxPlayerZones; }
+    public boolean pvpInWilderness() { return this.pvpInWilderness; }
+
     public String[] getAllowedWorlds() { return this.allowedWorlds; }
-    
+
     public double getPublicZoneCost() { return this.publicZoneCost; }
     public double getPublicSpawnCost() { return this.publicSpawnCost; }
     public double getPvpZoneCost() { return this.pvpZoneCost; }

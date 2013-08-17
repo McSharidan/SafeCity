@@ -282,18 +282,21 @@ public final class SafeCityContext
         int chunkX = location.getBlockX() >> 4;
         int chunkZ = location.getBlockZ() >> 4;
 
-        ChunkLocation cl = new ChunkLocation(chunkX, chunkZ);
+        ChunkLocation cl = new ChunkLocation(world.getName(), chunkX, chunkZ);
 
         SafeCityZoneCollection zoneColl = zoneMap.get(cl);
 
-        if (zoneColl == null) { return null; }
+        if (zoneColl == null)
+        {
+            return null;
+        }
 
         return zoneColl.getExactZone(location, world);
     }
 
-    public SafeCityZoneCollection getZonesInChunk(int chunkX, int chunkZ)
+    public SafeCityZoneCollection getZonesInChunk(World world, int chunkX, int chunkZ)
     {
-        ChunkLocation chunkLocation = new ChunkLocation(chunkX, chunkZ);
+        ChunkLocation chunkLocation = new ChunkLocation(world.getName(), chunkX, chunkZ);
         return zoneMap.get(chunkLocation);
     }
 
@@ -302,7 +305,7 @@ public final class SafeCityContext
         int chunkX = location.getBlockX() >> 4;
         int chunkZ = location.getBlockZ() >> 4;
 
-        ChunkLocation cl = new ChunkLocation(chunkX, chunkZ);
+        ChunkLocation cl = new ChunkLocation(world.getName(), chunkX, chunkZ);
 
         SafeCitySubZoneCollection subZoneColl = subZoneMap.get(cl);
 
@@ -311,9 +314,9 @@ public final class SafeCityContext
         return subZoneColl.getExactSubZone(location, world);
     }
 
-    public SafeCitySubZoneCollection getSubZonesInChunk(int chunkX, int chunkZ)
+    public SafeCitySubZoneCollection getSubZonesInChunk(World world, int chunkX, int chunkZ)
     {
-        ChunkLocation chunkLocation = new ChunkLocation(chunkX, chunkZ);
+        ChunkLocation chunkLocation = new ChunkLocation(world.getName(), chunkX, chunkZ);
         return subZoneMap.get(chunkLocation);
     }
 
@@ -419,7 +422,7 @@ public final class SafeCityContext
         {
             for (int z = minZ; z <= maxZ; z++)
             {
-                ChunkLocation chunkLoc = new ChunkLocation(x >> 4, z >> 4);
+                ChunkLocation chunkLoc = new ChunkLocation(world.getName(), x >> 4, z >> 4);
                 SafeCityZoneCollection zoneCollection = zoneMap.get(chunkLoc);
 
                 if (zoneCollection == null) { continue; }
@@ -497,7 +500,7 @@ public final class SafeCityContext
             for (int z = minChunkZ; z <= maxChunkZ; z++)
             {
 
-                ChunkLocation chunkLoc = new ChunkLocation(x, z);
+                ChunkLocation chunkLoc = new ChunkLocation(zone.getWorld().getName(), x, z);
 
                 // if one does not exist
                 if (!zoneMap.containsKey(chunkLoc))
@@ -537,7 +540,7 @@ public final class SafeCityContext
         {
             for (int z = minChunkZ; z <= maxChunkZ; z++)
             {
-                ChunkLocation chunkLoc = new ChunkLocation(x, z);
+                ChunkLocation chunkLoc = new ChunkLocation(subZone.getWorld().getName(), x, z);
 
                 // if one does not exist
                 if (!subZoneMap.containsKey(chunkLoc))
@@ -576,7 +579,7 @@ public final class SafeCityContext
         {
             for (int z = minChunkZ; z <= maxChunkZ; z++)
             {
-                ChunkLocation chunkLoc = new ChunkLocation(x, z);
+                ChunkLocation chunkLoc = new ChunkLocation(zone.getWorld().getName(), x, z);
 
                 if (zoneMap.get(chunkLoc).containsZone(zone))
                 {
@@ -605,7 +608,7 @@ public final class SafeCityContext
         {
             for (int z = minChunkZ; z <= maxChunkZ; z++)
             {
-                ChunkLocation chunkLoc = new ChunkLocation(x, z);
+                ChunkLocation chunkLoc = new ChunkLocation(subZone.getWorld().getName(), x, z);
 
                 if (subZoneMap.get(chunkLoc).containsSubZone(subZone))
                 {

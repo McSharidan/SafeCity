@@ -43,7 +43,7 @@ public final class ZoneNotifyListener implements Listener
         int chunkX = (playerLocation.getBlockX() >> 4);
         int chunkZ = (playerLocation.getBlockZ() >> 4);
 
-        SafeCityZoneCollection zoneCollection = context.getZonesInChunk(chunkX, chunkZ);
+        SafeCityZoneCollection zoneCollection = context.getZonesInChunk(playerLocation.getWorld(), chunkX, chunkZ);
 
         if (zoneCollection == null)
         {
@@ -92,7 +92,7 @@ public final class ZoneNotifyListener implements Listener
             return;
         }
 
-        SafeCitySubZoneCollection subZoneCollection = context.getSubZonesInChunk(chunkX, chunkZ);
+        SafeCitySubZoneCollection subZoneCollection = context.getSubZonesInChunk(playerLocation.getWorld(), chunkX, chunkZ);
         SafeCitySubZone currentSubZone = null;
 
         if (subZoneCollection != null)

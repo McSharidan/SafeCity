@@ -278,7 +278,7 @@ public final class SignsListener implements Listener
 
         Chunk chunk = event.getChunk();
 
-        SafeCityZoneCollection zoneCollection = context.getZonesInChunk(chunk.getX(), chunk.getZ());
+        SafeCityZoneCollection zoneCollection = context.getZonesInChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
 
         if (zoneCollection == null)
             return;
@@ -316,7 +316,7 @@ public final class SignsListener implements Listener
             }
         }
 
-        SafeCitySubZoneCollection subZoneCollection = context.getSubZonesInChunk(chunk.getX(), chunk.getZ());
+        SafeCitySubZoneCollection subZoneCollection = context.getSubZonesInChunk(chunk.getWorld(), chunk.getX(), chunk.getZ());
 
         if (subZoneCollection == null)
             return;
