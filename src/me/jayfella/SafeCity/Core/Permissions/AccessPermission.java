@@ -13,37 +13,38 @@ public final class AccessPermission implements ZonePermissionInterface
 
     @Override public boolean canAccessAllBlocks()	{ return false; }
     @Override public Material[] getAccessibleBlocks()
-	{
-		return new Material[]
-			{
-				Material.ANVIL,
-				Material.BED,
-				Material.BOAT,
-				Material.BREWING_STAND,
-				Material.CAULDRON,
-				Material.CHEST,
-				Material.DISPENSER,
-                Material.DROPPER,
-				Material.ENDER_CHEST,
-				Material.ENCHANTMENT_TABLE,
-                Material.FENCE_GATE,
-				Material.FURNACE,
-                Material.HOPPER,
-				Material.MINECART,
-				Material.POWERED_MINECART,
-				Material.STORAGE_MINECART,
-				Material.TRAP_DOOR,
-				Material.WOODEN_DOOR,
-				Material.WORKBENCH,
-				Material.STONE_BUTTON,
-				Material.WOOD_BUTTON,
-				Material.LEVER,
-				Material.STONE_PLATE,
-				Material.WOOD_PLATE,
-				Material.JUKEBOX,
-                Material.NOTE_BLOCK,
-			};
-	}
+    {
+        return new Material[]
+        {
+            Material.ANVIL,
+            Material.BED,
+            Material.BOAT,
+            Material.BURNING_FURNACE,
+            Material.BREWING_STAND,
+            Material.CAULDRON,
+            Material.CHEST,
+            Material.DISPENSER,
+            Material.DROPPER,
+            Material.ENDER_CHEST,
+            Material.ENCHANTMENT_TABLE,
+            Material.FENCE_GATE,
+            Material.FURNACE,
+            Material.HOPPER,
+            Material.MINECART,
+            Material.POWERED_MINECART,
+            Material.STORAGE_MINECART,
+            Material.TRAP_DOOR,
+            Material.WOODEN_DOOR,
+            Material.WORKBENCH,
+            Material.STONE_BUTTON,
+            Material.WOOD_BUTTON,
+            Material.LEVER,
+            Material.STONE_PLATE,
+            Material.WOOD_PLATE,
+            Material.JUKEBOX,
+            Material.NOTE_BLOCK,
+        };
+    }
 
     @Override public boolean canPlaceAllBlocks() { return false; }
     @Override public Material[] getPlaceableBlocks()
