@@ -18,7 +18,8 @@ public final class PluginSettings
     private final String[] allowedWorlds;
 
     // --INDEV
-    // private final boolean allowCreeperExplosions;
+    private final boolean allowCreeperExplosions;
+    private final boolean allowTntExplosions;
     // private final boolean FounderLightPortalsOnly;
 
     private final double publicZoneCost;
@@ -43,16 +44,19 @@ public final class PluginSettings
                 fileConfig.getString("database.username"),
                 fileConfig.getString("database.password"));
 
-        this.minZoneDistance = fileConfig.getInt("general.min-zone-distance");
-        this.maxPlayerZones = fileConfig.getInt("general.max-zones-per-player");
-        this.pvpInWilderness = fileConfig.getBoolean("general.wilderness-pvp");
+        this.minZoneDistance = fileConfig.getInt("general.min-zone-distance", 50);
+        this.maxPlayerZones = fileConfig.getInt("general.max-zones-per-player", 1);
+        this.pvpInWilderness = fileConfig.getBoolean("general.wilderness-pvp", false);
 
         List<?> worlds = fileConfig.getList("allowed-worlds");
         this.allowedWorlds = worlds.toArray(new String[worlds.size()]);
 
-        this.publicZoneCost = fileConfig.getDouble("prices.public-zone");
-        this.publicSpawnCost = fileConfig.getDouble("prices.public-spawn");
-        this.pvpZoneCost = fileConfig.getDouble("prices.pvp-zone");
+        this.publicZoneCost = fileConfig.getDouble("prices.public-zone", 15000);
+        this.publicSpawnCost = fileConfig.getDouble("prices.public-spawn", 7500);
+        this.pvpZoneCost = fileConfig.getDouble("prices.pvp-zone", 1000);
+        
+        this.allowCreeperExplosions = fileConfig.getBoolean("general.creeperexplosion", false);
+        this.allowTntExplosions = fileConfig.getBoolean("general.tntexplosion", false);
     }
 
     public int getNewZoneId() { zoneIdIncrement++; return zoneIdIncrement; }
@@ -66,6 +70,9 @@ public final class PluginSettings
     public double getPublicZoneCost() { return this.publicZoneCost; }
     public double getPublicSpawnCost() { return this.publicSpawnCost; }
     public double getPvpZoneCost() { return this.pvpZoneCost; }
+    
+    public boolean creeperExplosionAllowed() { return this.allowCreeperExplosions; }
+    public boolean tntExplosionAllowed() { return this.allowTntExplosions; }
 
     public DatabaseDetails databaseDetails() { return this.databaseDetails; }
 

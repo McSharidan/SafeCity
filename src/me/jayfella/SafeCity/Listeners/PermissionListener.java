@@ -41,12 +41,12 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 public final class PermissionListener implements Listener
 {
 
-	private final SafeCityContext context;
+    private final SafeCityContext context;
 
-	public PermissionListener(SafeCityContext context)
-	{
-		this.context = context;
-	}
+    public PermissionListener(SafeCityContext context)
+    {
+            this.context = context;
+    }
 
     @EventHandler
     public void onHopperPlace(BlockPlaceEvent event)
@@ -340,7 +340,7 @@ public final class PermissionListener implements Listener
 
             if ((potion.getShooter() instanceof Player))
             {
-                    attacker = (Player)potion.getShooter();
+                attacker = (Player)potion.getShooter();
             }
         }
         else if ((damageSource instanceof Egg))

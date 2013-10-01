@@ -10,6 +10,8 @@ general:
   min-zone-distance: 50
   max-zones-per-player: 1
   wilderness-pvp: false
+  creeperexplosion: false
+  tntexplosion: false
 
 allowed-worlds:
   - world

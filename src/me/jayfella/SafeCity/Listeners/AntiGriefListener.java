@@ -1,12 +1,15 @@
 package me.jayfella.SafeCity.Listeners;
 
+import java.util.Iterator;
 import java.util.List;
+import me.jayfella.SafeCity.Core.ThinLocation;
 import me.jayfella.SafeCity.Core.ZonePermissionType;
 import me.jayfella.SafeCity.SafeCityContext;
 import me.jayfella.SafeCity.SafeCityPlayer;
 import me.jayfella.SafeCity.SafeCitySubZone;
 import me.jayfella.SafeCity.SafeCityZone;
 import me.jayfella.SafeCity.SafeCityZoneCollection;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
@@ -296,7 +299,55 @@ public final class AntiGriefListener implements Listener
         if (!context.isValidWorld(event.getEntity().getWorld().getName()))
             return;
 
-        event.blockList().clear();
+        if (context.getPluginSettings().creeperExplosionAllowed() == false && context.getPluginSettings().tntExplosionAllowed() == false)
+        {
+            event.blockList().clear();
+            return;
+        }
+        
+        Iterator<Block> iterator = event.blockList().iterator();
+        
+        if (event.getEntity().getType() == EntityType.CREEPER)
+        {
+            if (context.getPluginSettings().creeperExplosionAllowed())
+            {
+                while (iterator.hasNext())
+                {
+                    Block block = iterator.next();
+
+                    Location loc = block.getLocation();
+                    ThinLocation tLoc = context.toThinLocation(loc);
+                    SafeCityZone zone = context.getZone(tLoc, loc.getWorld());
+
+                    if (zone != null)
+                        iterator.remove();
+                }
+            }
+            else
+            {
+                event.blockList().clear();
+            }
+            
+        }
+        
+        if (event.getEntity().getType() == EntityType.PRIMED_TNT)
+        {
+            if (context.getPluginSettings().tntExplosionAllowed())
+            {
+                while (iterator.hasNext())
+                {
+                    Block block = iterator.next();
+
+                    Location loc = block.getLocation();
+                    ThinLocation tLoc = context.toThinLocation(loc);
+                    SafeCityZone zone = context.getZone(tLoc, loc.getWorld());
+
+                    if (zone != null)
+                        iterator.remove();
+                }
+            }
+        }
+        
     }
 
     @EventHandler(priority=EventPriority.LOWEST)
@@ -318,22 +369,24 @@ public final class AntiGriefListener implements Listener
         if (!context.isValidWorld(event.getPlayer().getWorld().getName()))
             return;
 
-        if (event.getBlock().getType() == Material.TNT)
-        {
-            event.setCancelled(true);
-        }
+        // if (event.getBlock().getType() == Material.TNT && context.getPluginSettings().tntExplosionAllowed() == false)
+        // {
+            // event.setCancelled(true);
+        // }
     }
 
     @EventHandler(priority=EventPriority.HIGHEST)
     public void onTntPrime(ExplosionPrimeEvent event)
     {
-        if (!context.isValidWorld(event.getEntity().getWorld().getName()))
-            return;
+        // maybe we should leave worldguard to deal with block placement instad.
+        
+        // if (!context.isValidWorld(event.getEntity().getWorld().getName()))
+            // return;
 
-        if (event.getEntity() instanceof TNTPrimed)
-        {
-            event.setCancelled(true);
-        }
+        // if (event.getEntity() instanceof TNTPrimed)
+        // {
+            // event.setCancelled(true);
+        // }
     }
 
     @EventHandler(priority=EventPriority.HIGHEST)
@@ -407,5 +460,5 @@ public final class AntiGriefListener implements Listener
             event.setCancelled(true);
          }
     }
-
+    
 }

@@ -2,13 +2,13 @@ package me.jayfella.SafeCity.Core;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.server.v1_6_R2.EntityPlayer;
-import net.minecraft.server.v1_6_R2.Packet52MultiBlockChange;
-import net.minecraft.server.v1_6_R2.WorldServer;
+import net.minecraft.server.v1_6_R3.EntityPlayer;
+import net.minecraft.server.v1_6_R3.Packet52MultiBlockChange;
+import net.minecraft.server.v1_6_R3.WorldServer;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_6_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_6_R3.entity.CraftPlayer;
 
 public final class ChunkBlockPair
 {
@@ -41,7 +41,7 @@ public final class ChunkBlockPair
     public synchronized void setData(int x, int z)
     {
         this.chunkWorld = visualManager.getSafeCityPlayer().getBukkitPlayer().getWorld();
-        this.nativeChunkWorld = ((org.bukkit.craftbukkit.v1_6_R2.CraftWorld)this.chunkWorld).getHandle();
+        this.nativeChunkWorld = ((org.bukkit.craftbukkit.v1_6_R3.CraftWorld)this.chunkWorld).getHandle();
 
         this.chunkX = x;
         this.chunkZ = z;
